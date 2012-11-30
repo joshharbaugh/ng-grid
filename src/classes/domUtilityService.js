@@ -70,7 +70,7 @@ ng.domUtilityService = {
               "." + gridId + " .ngCanvas { width: " + trw + "px; }" +
               "." + gridId + " .ngHeaderCell { top: 0; bottom: 0; }" + 
               "." + gridId + " .ngHeaderScroller { line-height: " + headerRowHeight + "px; width: " + (trw + ng.domUtilityService.scrollH + 2) + "px}";
-        ko.utils.forEach(cols, function(col, i) {
+        $.each(cols, function (i, col) {
             css += "." + gridId + " .col" + i + " { width: " + col.width + "px; left: " + sumWidth + "px; right: " + (trw - sumWidth - col.width) + "px; height: " + rowHeight + "px }" +
                    "." + gridId + " .colt" + i + " { width: " + col.width + "px; }";
             sumWidth += col.width;

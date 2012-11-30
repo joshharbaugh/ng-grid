@@ -8,6 +8,7 @@
 ..\src\templates\aggregateTemplate.html
 ..\src\templates\headerRowTemplate.html
 ..\src\templates\headerCellTemplate.html
+..\src\templates\footerTemplate.html
 ..\src\classes\aggregate.js
 ..\src\classes\aggregateProvider.js
 ..\src\classes\column.js
@@ -28,3 +29,4 @@
 ..\src\bindingHandlers\ng-cell.js
 ..\src\bindingHandlers\ng-header-row.js
 ..\src\bindingHandlers\ng-header-cell.js
+..\src\bindingHandlers\ng-footer.js

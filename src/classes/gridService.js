@@ -8,32 +8,32 @@ ng.gridService = {
     eventStorage: {},
     getIndexOfCache: function() {
         var indx = -1;   
-        for (var grid in gridService.gridCache) {
+        for (var grid in ng.gridService.gridCache) {
             indx++;
-            if (!gridService.gridCache.hasOwnProperty(grid)) continue;
+            if (!ng.gridService.gridCache.hasOwnProperty(grid)) continue;
             return indx;
         }
         return indx;
     },
     StoreGrid: function (element, grid) {
-        gridService.gridCache[grid.gridId] = grid;
+        ng.gridService.gridCache[grid.gridId] = grid;
         element[GRID_KEY] = grid.gridId;
     },
     RemoveGrid: function(gridId) {
-        delete gridService.gridCache[gridId];
+        delete ng.gridService.gridCache[gridId];
     },
     GetGrid: function (element) {
         var grid;
         if (element[GRID_KEY]) {
-            grid = gridService.gridCache[element[GRID_KEY]];
+            grid = ng.gridService.gridCache[element[GRID_KEY]];
             return grid;
         }
         return false;
     },
     ClearGridCache : function () {
-        gridService.gridCache = {};
+        ng.gridService.gridCache = {};
     },
-    AssignGridEventHandlers: function ($scope, grid) {
+    AssignGridEventHandlers: function (grid) {
         grid.$viewport.scroll(function (e) {
             var scrollLeft = e.target.scrollLeft,
             scrollTop = e.target.scrollTop;
@@ -42,7 +42,7 @@ ng.gridService = {
         });
         grid.$viewport.off('keydown');
         grid.$viewport.on('keydown', function (e) {
-            return ng.moveSelectionHandler($scope, grid, e);
+            return ng.moveSelectionHandler(grid, e);
         });
         //Chrome and firefox both need a tab index so the grid can recieve focus.
         //need to give the grid a tabindex if it doesn't already have one so
@@ -50,7 +50,7 @@ ng.gridService = {
         //that way we'll get the same result every time it is run.
         //configurable within the options.
         if (grid.config.tabIndex === -1){
-            grid.$viewport.attr('tabIndex', gridService.getIndexOfCache(grid.gridId));
+            grid.$viewport.attr('tabIndex', ng.gridService.getIndexOfCache(grid.gridId));
         } else {
             grid.$viewport.attr('tabIndex', grid.config.tabIndex);
         }

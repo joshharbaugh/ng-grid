@@ -39,11 +39,14 @@ ng.Row = function (entity, config, selectionService) {
     self.rowIndex = 0;
     self.offsetTop = 0;
     self.rowDisplayIndex = 0;
-    self.alternatingRowClass = function () {
-        if (self.rowIndex % 2 == 0)
-            return "even";
-		return "odd";
-    };
+    self.isEven = ko.computed(function () {
+        if (self.rowIndex % 2 == 0) return true;
+        return false;
+    });
+    self.isOdd = ko.computed(function () {
+        if (self.rowIndex % 2 != 0) return true;
+        return false;
+    });
     self.beforeSelectionChange = config.beforeSelectionChangeCallback;
     self.afterSelectionChange = config.afterSelectionChangeCallback;
     self.propertyCache = {};

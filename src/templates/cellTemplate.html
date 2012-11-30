@@ -1,2 +1,2 @@
 <!--ng.defaultCellTemplate-->
-<div data-bind="css: 'colt' + $index, html: col.getProperty($data)" class="ngCellText"></div>
+<div data-bind="attr: { 'class': 'ngCellText colt' + $index}, html: col.getProperty($data)"></div>

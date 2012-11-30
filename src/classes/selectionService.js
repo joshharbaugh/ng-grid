@@ -66,13 +66,13 @@ ng.SelectionService = function (grid) {
         if (selectedlength > 0) {
             self.selectedItems.splice(0, selectedlength);
         }
-        angular.forEach(grid.filteredData, function (item) {
+        $.each(grid.filteredData, function (i, item) {
             item[SELECTED_PROP] = checkAll;
             if (checkAll) {
                 self.selectedItems.push(item);
             }
         });
-        angular.forEach(self.rowFactory.rowCache, function (row) {
+        $.each(self.rowFactory.rowCache, function (i, row) {
             row.selected = checkAll;
         });
     };

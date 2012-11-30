@@ -30,18 +30,18 @@ ng.Aggregate = function (aggEntity, rowFactory) {
         self.notifyChildren();
     };
     self.notifyChildren = function() {
-        ko.utils.forEach(self.aggChildren, function(child) {
+        $.each(self.aggChildren, function (i, child) {
             child.entity[NG_HIDDEN] = self.collapsed;
             if (self.collapsed) {
                 child.setExpand(self.collapsed);
             }
         });
-        ko.utils.forEach(self.children, function (child) {
+        $.each(self.children, function (i, child) {
             child[NG_HIDDEN] = self.collapsed;
         });
         rowFactory.rowCache = [];
         var foundMyself = false;
-        ko.utils.forEach(rowFactory.aggCache, function (agg, i) {
+        $.each(rowFactory.aggCache, function (i, agg) {
             if (foundMyself) {
                 var offset = (30 * self.children.length);
                 agg.offsetTop = self.collapsed ? agg.offsetTop - offset : agg.offsetTop + offset;
@@ -61,7 +61,7 @@ ng.Aggregate = function (aggEntity, rowFactory) {
             var i = 0;
             var recurse = function (cur) {
                 if (cur.aggChildren.length > 0) {
-                    ko.utils.forEach(cur.aggChildren, function (a) {
+                    $.each(cur.aggChildren, function (i, a) {
                         recurse(a);
                     });
                 } else {

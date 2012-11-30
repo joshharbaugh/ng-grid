@@ -86,7 +86,7 @@ ng.RowFactory = function(grid) {
         var dataArray = self.parsedData.filter(function(e) {
             return e[NG_HIDDEN] === false;
         }).slice(self.renderedRange.topRow, self.renderedRange.bottomRow);
-        ko.utils.forEach(dataArray, function(item, indx) {
+        $.each(dataArray, function(indx, item) {
             var row;
             if (item.isAggRow) {
                 row = self.buildAggregateRow(item, self.renderedRange.topRow + indx);
@@ -103,7 +103,7 @@ ng.RowFactory = function(grid) {
     self.renderedChangeNoGroups = function() {
         var rowArr = [];
         var dataArr = grid.filteredData.slice(self.renderedRange.topRow, self.renderedRange.bottomRow);
-        ko.utils.forEach(dataArr, function(item, i) {
+        $.each(dataArr, function (i, item) {
             var row = self.buildEntityRow(item, self.renderedRange.topRow + i);
             //add the row to our return array
             rowArr.push(row);
@@ -114,7 +114,7 @@ ng.RowFactory = function(grid) {
     //magical recursion. it works. I swear it. I figured it out in the shower one day.
     self.parseGroupData = function(g) {
         if (g.values) {
-            ko.utils.forEach(g.values, function(item) {
+            $.each(g.values, function (i, item) {
                 // get the last parent in the array because that's where our children want to be
                 self.parentCache[self.parentCache.length - 1].children.push(item);
                 //add the row to our return array
@@ -166,10 +166,10 @@ ng.RowFactory = function(grid) {
         var maxDepth = groups.length;
         var cols = grid.columns;
 
-        ko.utils.forEach(data, function(item) {
+        $.each(data, function (i, item) {
             item[NG_HIDDEN] = true;
             var ptr = self.groupedData;
-            ko.utils.forEach(groups, function(group, depth) {
+            $.each(groups, function(depth, group) {
                 if (!cols[depth].isAggCol && depth <= maxDepth) {
                     cols.splice(item.gDepth, 0, new ng.Column({
                         colDef: {

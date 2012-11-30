@@ -2,7 +2,8 @@
     return {
         'init': function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
             var options = valueAccessor();
-            options.gridDim = new ng.Dimension({ outerHeight: element.height(), outerWidth: $element.width() });
+            var elem = $(element);
+            options.gridDim = new ng.Dimension({ outerHeight: elem.height(), outerWidth: elem.width() });
             var grid = new ng.Grid(options);
             var gridElem = $(ng.defaultGridTemplate());
             ng.gridService.StoreGrid(element, grid);
@@ -16,22 +17,20 @@
                 grid.refreshDomSizes();
             }, options.watchDataItems);
             //set the right styling on the container
-            element.addClass("ngGrid")
-                   .addClass("ui-widget")
-                   .addClass(grid.gridId.toString());
+            elem.addClass("ngGrid")
+                .addClass("ui-widget")
+                .addClass(grid.gridId.toString());
             //call update on the grid, which will refresh the dome measurements asynchronously
-            element.append(gridElem);// make sure that if any of these change, we re-fire the calc logic
-            var footer = gridElem.find(".ngFooterPanel");
-            ko.applyBindings(grid, gridElem);
-            ko.applyBindings(grid.footerController, footer);
+            elem.append(gridElem);// make sure that if any of these change, we re-fire the calc logic
+            ko.applyBindings(grid, gridElem[0]);
             //walk the element's graph and the correct properties on the grid
-            domUtilityService.AssignGridContainers(element, grid);
+            ng.domUtilityService.AssignGridContainers(elem, grid);
             grid.configureColumnWidths();
             //now use the manager to assign the event handlers
-            gridService.AssignGridEventHandlers(grid);
+            ng.gridService.AssignGridEventHandlers(grid);
             grid.aggregateProvider = new ng.AggregateProvider(grid);
             //initialize plugins.
-            angular.forEach(options.plugins, function (p) {
+            $.each(grid.config.plugins, function (i, p) {
                 p.init(grid);
             });
         }

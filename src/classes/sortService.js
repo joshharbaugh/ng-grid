@@ -186,7 +186,7 @@ ng.sortService = {
         return;
     },
     Sort: function (sortInfo, data) {
-        if (sortService.isSorting) return;
+        if (ng.sortService.isSorting) return;
         ng.sortService.isSorting = true;
         ng.sortService.sortData(data, sortInfo);
         ng.sortService.isSorting = false;

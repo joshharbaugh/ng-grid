@@ -18,9 +18,9 @@ ko.bindingHandlers['ngRow'] = (function () {
             } else {
                 html = grid.rowTemplate;
             }
-            var rowElem = $(document.createElement(html));
-            ko.applyBindings(row, rowElem);
-            element.append(rowElem);
+            var rowElem = $(html);
+            ko.applyBindings(row, rowElem[0]);
+            $(element).append(rowElem);
         }
     };
 }());

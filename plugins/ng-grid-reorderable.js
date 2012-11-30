@@ -144,7 +144,7 @@ ngGridReorderable = function (options) {
             self.$scope.columns.splice(self.colToMove.col.index, 1);
             self.$scope.columns.splice(headerScope.col.index, 0, self.colToMove.col);
             // Fix all the indexes on the columns so if we reorder again the columns will line up correctly.
-            angular.forEach(self.$scope.columns, function(col, i) {
+            $.each(self.$scope.columns, function (i, col) {
                 col.index = i;
             });
             // Finally, rebuild the CSS styles.

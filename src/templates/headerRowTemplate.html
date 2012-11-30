@@ -1,2 +1,4 @@
 <!--ng.defaultHeaderRowTemplate-->
-<div data-bind="ngHeaderCell: $data, foreach: col in $root.visibleColumns, css: 'col' + $index" class="ngHeaderCell"><div>
+<div data-bind="foreach: visibleColumns">
+    <div data-bind="ngHeaderCell: $data, attr: { 'class': 'ngHeaderCell col' + $index }"></div>
+</div>

@@ -7,7 +7,7 @@
     self.filterText = grid.config.filterOptions.filterText;
     self.fieldMap = {};
     self.evalFilter = function() {
-        var ft = self.filterText.toLowerCase();
+        var ft = self.filterText().toLowerCase();
         var v = self.value;
         grid.filteredData = grid.sortedData.filter(function(item) {
             if (!self.filterText) {
@@ -38,8 +38,8 @@
     });
     if (!self.extFilter) {
         grid.columns.subscribe(function(a) {
-            angular.forEach(a, function(col) {
-                self.fieldMap[col.displayName.toLowerCase().replace(' ', '_')] = col.field;
+            $.each(a, function (i, col) {
+                self.fieldMap[col.displayName().toLowerCase().replace(' ', '_')] = col.field;
             });
         });
     }

@@ -72,10 +72,9 @@ ng.Grid = function (options) {
     self.sortedData = [];
     self.lateBindColumns = false;
     self.filteredData = [];
-    if (typeof self.config.data == "object") {
-        self.sortedData = $.extend(true, [], self.config.data); // we cannot watch for updates if you don't pass the string name
-    }
     self.lastSortedColumn = undefined;
+    self.showFilter = self.config.showFilter;
+    self.filterText = self.config.filterText;
     self.calcMaxCanvasHeight = function() {
         return (self.config.groups.length > 0) ? (self.rowFactory.parsedData.filter(function (e) {
             return e[NG_HIDDEN] === false;
@@ -147,7 +146,7 @@ ng.Grid = function (options) {
             });
         }
         if (columnDefs.length > 0) {
-            ko.utils.forEach(columnDefs, function (colDef, i) {
+            $.each(columnDefs, function (i, colDef) {
                 var column = new ng.Column({
                     colDef: colDef, 
                     index: i, 
@@ -162,7 +161,7 @@ ng.Grid = function (options) {
                     self.configGroups.splice(indx, 0, column);
                 }
             });
-            self.columns = cols;
+            self.columns(cols);
         }
     };
     self.configureColumnWidths = function() {
@@ -172,8 +171,8 @@ ng.Grid = function (options) {
             percentArray = [],
             asteriskNum = 0,
             totalWidth = 0;
-        
-        ko.utils.forEach(cols, function(col, i) {
+        var columns = self.columns();
+        $.each(cols, function (i, col) {
             var isPercent = false, t = undefined;
             //if width is not defined, set it to a single star
             if (ng.utils.isNullOrUndefined(col.width)) {
@@ -187,14 +186,14 @@ ng.Grid = function (options) {
                 t = col.width;
                 // figure out if the width is defined or if we need to calculate it
                 if (t == 'auto') { // set it for now until we have data and subscribe when it changes so we can set the width.
-                    self.columns[i].width = col.minWidth;
+                    columns[i].width = col.minWidth;
                     var temp = col;
                     $(document).ready(function() { self.resizeOnData(temp, true); });
                     return;
                 } else if (t.indexOf("*") != -1) {
                     // if it is the last of the columns just configure it to use the remaining space
                     if (i + 1 == numOfCols && asteriskNum == 0) {
-                        self.columns[i].width = (self.rootDim.outerWidth - ng.domUtilityService.scrollW) - totalWidth;
+                        columns[i].width = (self.rootDim.outerWidth - ng.domUtilityService.scrollW) - totalWidth;
                     } else { // otherwise we need to save it until the end to do the calulations on the remaining width.
                         asteriskNum += t.length;
                         col.index = i;
@@ -209,7 +208,7 @@ ng.Grid = function (options) {
                     throw "unable to parse column width, use percentage (\"10%\",\"20%\", etc...) or \"*\" to use remaining width of grid";
                 }
             } else {
-                totalWidth += self.columns[i].width = parseInt(col.width);
+                totalWidth += columns[i].width = parseInt(col.width);
             }
         });
         // check if we saved any asterisk columns for calculating later
@@ -220,21 +219,22 @@ ng.Grid = function (options) {
             // calculate the weight of each asterisk rounded down
             var asteriskVal = Math.floor(remainigWidth / asteriskNum);
             // set the width of each column based on the number of stars
-            ko.utils.forEach(asterisksArray, function (col) {
+            $.each(asterisksArray, function (i, col) {
                 var t = col.width.length;
-                self.columns[col.index].width = asteriskVal * t;
-                if (col.index + 1 == numOfCols && self.maxCanvasHt > self.viewportDimHeight()) self.columns[col.index].width -= (ng.domUtilityService.ScrollW + 2);
-                totalWidth += self.columns[col.index].width;
+                columns[col.index].width = asteriskVal * t;
+                if (col.index + 1 == numOfCols && self.maxCanvasHt > self.viewportDimHeight()) columns[col.index].width -= (ng.domUtilityService.ScrollW + 2);
+                totalWidth += columns[col.index].width;
             });
         }
         // Now we check if we saved any percentage columns for calculating last
         if (percentArray.length > 0) {
             // do the math
-            ko.utils.forEach(percentArray, function (col) {
+            $.each(percentArray, function (i, col) {
                 var t = col.width;
-                self.columns[col.index].width = Math.floor(self.rootDim.outerWidth * (parseInt(t.slice(0, -1)) / 100));
+                columns[col.index].width = Math.floor(self.rootDim.outerWidth * (parseInt(t.slice(0, -1)) / 100));
             });
         }
+        self.columns(columns);
     };
     self.init = function () {
         //factories and services
@@ -245,11 +245,10 @@ ng.Grid = function (options) {
         self.styleProvider = new ng.StyleProvider(self);
         self.buildColumns();
         ng.sortService.columns = self.columns,
-        self.sortInfo.subscribe(ng.sortService.updateSortInfo);
         self.configGroups.subscribe(function (a) {
             if (!a) return;
             var tempArr = [];
-            ko.utils.forEach(a, function(item) {
+            $.each(a, function (i, item) {
                 tempArr.push(item.field || item);
             });
             self.config.groups = tempArr;
@@ -282,7 +281,7 @@ ng.Grid = function (options) {
         // we calculate the longest data.
         var longest = col.minWidth;
         var arr = ng.utils.getElementsByClassName('col' + col.index);
-        ko.utils.forEach(arr, function (elem, index) {
+        $.each(arr, function (index, elem) {
             var i;
             if (index == 0) {
                 var kgHeaderText = $(elem).find('.ngHeaderText');
@@ -310,7 +309,7 @@ ng.Grid = function (options) {
     };
     self.clearSortingData = function (col) {
         if (!col) {
-            ko.utils.forEach(self.columns, function (c) {
+            $.each(self.columns(), function (i, c) {
                 c.sortDirection = "";
             });
         } else if (self.lastSortedColumn && col != self.lastSortedColumn) {
@@ -319,14 +318,14 @@ ng.Grid = function (options) {
     };
     self.fixColumnIndexes = function() {
         //fix column indexes
-        ko.utils.forEach(self.columns, function(col, i) {
+        $.each(self.columns(), function (i, col) {
             col.index = i;
         });
     };
     //self vars
     self.elementsNeedMeasuring = true;
-    self.columns = [];
-    self.renderedRows = [];
+    self.columns = ko.observableArray([]);
+    self.renderedRows = ko.observableArray([]);
     self.headerRow = null;
     self.rowHeight = self.config.rowHeight;
 	self.jqueryUITheme = ko.observable(self.config.jqueryUITheme);
@@ -342,28 +341,16 @@ ng.Grid = function (options) {
     self.enablePaging = self.config.enablePaging;
     self.pagingOptions = self.config.pagingOptions;
     //Templates
-    if (self.config.rowTemplate) {
-        ng.utils.getTemplates(self.config.rowTemplate, function (template) {
-            self.rowTemplate = template;
-        });
-    } else {
-        self.rowTemplate = ng.defaultRowTemplate();
-    }
-    if (self.config.headerRowTemplate) {
-        ng.utils.getTemplates(self.config.headerRowTemplate, function (template) {
-            self.headerRowTemplate = template;
-        });
-    } else {
-        self.headerRowTemplate = ng.defaultHeaderRowTemplate();
-    }
+    self.rowTemplate = self.config.rowTemplate || ng.defaultRowTemplate();
+    self.headerRowTemplate = self.config.headerRowTemplate || ng.defaultHeaderRowTemplate();
     //scope funcs
     self.visibleColumns = ko.computed(function () {
-        return self.columns.filter(function (col) {
+        return self.columns().filter(function (col) {
             return col.visible;
         });
     });
     self.nonAggColumns = ko.computed(function () {
-        return self.columns.filter(function (col) {
+        return self.columns().filter(function (col) {
             return !col.isAggCol;
         });
     });
@@ -373,19 +360,18 @@ ng.Grid = function (options) {
     self.toggleSelectAll = function (a) {
         self.selectionService.toggleSelectAll(a);
     };
-    self.totalFilteredItemsLength = function () {
+    self.totalFilteredItemsLength = ko.computed(function () {
         return Math.max(self.filteredData.length);
-    };
-	self.showGroupPanel = function(){
+    });
+	self.showGroupPanel = ko.computed(function(){
 		return self.config.showGroupPanel;
-	};
-	self.topPanelHeight = function(){
+	});
+	self.topPanelHeight = ko.computed(function(){
 	    return self.config.showGroupPanel == true ? self.config.headerRowHeight * 2 : self.config.headerRowHeight;
-	};
-    
-    self.viewportDimHeight = function () {
+	});
+	self.viewportDimHeight = ko.computed(function () {
         return Math.max(0, self.rootDim.outerHeight - self.topPanelHeight() - self.config.footerRowHeight - 2);
-    };
+    });
     self.groupBy = function(col) {
         var indx = self.configGroups.indexOf(col);
         if (indx == -1) {
@@ -406,7 +392,7 @@ ng.Grid = function (options) {
     self.totalRowWidth = function () {
         var totalWidth = 0,
             cols = self.visibleColumns();
-        ko.utils.forEach(cols, function (col) {
+        $.each(cols, function (i, col) {
             totalWidth += col.width;
         });
         return totalWidth;

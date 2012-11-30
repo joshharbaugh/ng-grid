@@ -2,9 +2,9 @@
     return {
         'init': function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
             var grid = valueAccessor();
-            var headerRow = $(document.createElement(grid.headerRowTemplate));
-            ko.applyBindings(viewModel, headerRow);
-            element.append(headerRow);
+            var headerRow = $(grid.headerRowTemplate);
+            ko.applyBindings(viewModel, headerRow[0]);
+            $(element).append(headerRow);
         }
     };
 }());
