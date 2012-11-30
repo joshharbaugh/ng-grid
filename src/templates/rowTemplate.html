@@ -1,2 +1,4 @@
 <!--ng.defaultRowTemplate-->
-<div data-bind="foreach: col in $root.visibleColumns, attr: { 'class': 'ngCell col' + $index + ' ' + $data.cellClass }, css: { 'ui-widget-content':jqueryUITheme }, ngCell: $data"></div>
+<div data-bind="foreach: $parent.visibleColumns, css: { 'ui-widget-content': $parent.jqueryUITheme }">
+    <div data-bind="attr: { 'class': 'ngCell col' + $index + ' ' + $data.cellClass }, ngCell: $data"></div>
+</div>

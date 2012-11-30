@@ -2,7 +2,7 @@
 <div class="ngFooterPanel" data-bind="ngFooter: $data, css: {'ui-widget-content': jqueryUITheme, 'ui-corner-bottom': jqueryUITheme}, style: footerStyle">
     <div class="ngTotalSelectContainer" data-bind="visible: footerVisible">
         <div class="ngFooterTotalItems" data-bind="css: {'ngNoMultiSelect': !multiSelect}" >
-            <span class="ngLabel">Total Items: <span data-bind="text: maxRowsDisplay"></span></span><span data-bind="visible: filterText.length > 0" class="ngLabel">(Showing: <span data-bind="text: totalFilteredItemsLength"></span>)</span>
+            <span class="ngLabel">Total Items: <span data-bind="text: maxRowsDisplay"></span></span><span data-bind="visible: filterText().length > 0" class="ngLabel">(Showing: <span data-bind="text: totalFilteredItemsLength"></span>)</span>
         </div>
         <div class="ngFooterSelectedItems" data-bind="visible: multiSelect">
             <span class="ngLabel">Selected Items: <span data-bind="text: selectedItemCount"></span>{{}}</span>

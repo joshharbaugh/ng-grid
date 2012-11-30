@@ -37,7 +37,7 @@ ng.Row = function (entity, config, selectionService) {
         return false;
     };
     self.rowIndex = 0;
-    self.offsetTop = 0;
+    self.offsetTop = ko.observable(0);
     self.rowDisplayIndex = 0;
     self.isEven = ko.computed(function () {
         if (self.rowIndex % 2 == 0) return true;

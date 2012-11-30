@@ -1,4 +1,5 @@
-﻿/// <reference path="../../lib/knockout-2.2.0.js" />
+﻿/// <reference path="../../lib/knockout-latest.debug.js" />
+/// <reference path="../../lib/knockout-2.2.0.js" />
 /// <reference path="footer.js" />
 /// <reference path="../../lib/jquery-1.8.2.min" />
 /// <reference path="../../lib/angular.js" />
@@ -31,8 +32,8 @@ ng.Grid = function (options) {
             afterSelectionChange: function () { return true;},
             rowTemplate: undefined,
             headerRowTemplate: undefined,
-            jqueryUITheme: ko.observable(false),
-            jqueryUIDraggable: ko.observable(false),
+            jqueryUITheme: false,
+            jqueryUIDraggable: false,
             plugins: [],
             keepLastSelected: true,
             groups: [],
@@ -41,7 +42,7 @@ ng.Grid = function (options) {
             showColumnMenu: ko.observable(true),
             showFilter: ko.observable(true),
             filterOptions: {
-                filterText: "",
+                filterText: ko.observable(""),
                 useExternalFilter: false,
             },
             //Paging 
@@ -69,12 +70,12 @@ ng.Grid = function (options) {
     self.$canvas = null;
     self.rootDim = self.config.gridDim;
     self.sortInfo = self.config.sortInfo;
-    self.sortedData = [];
+    self.sortedData = ko.observableArray([]);
     self.lateBindColumns = false;
-    self.filteredData = [];
+    self.filteredData = ko.observableArray([]);
     self.lastSortedColumn = undefined;
     self.showFilter = self.config.showFilter;
-    self.filterText = self.config.filterText;
+    self.filterText = self.config.filterOptions.filterText;
     self.calcMaxCanvasHeight = function() {
         return (self.config.groups.length > 0) ? (self.rowFactory.parsedData.filter(function (e) {
             return e[NG_HIDDEN] === false;
@@ -96,7 +97,7 @@ ng.Grid = function (options) {
     }
     //self funcs
     self.setRenderedRows = function (newRows) {
-        self.renderedRows = newRows;
+        self.renderedRows(newRows);
         self.refreshDomSizes();
     };
     self.minRowsToRender = function () {
@@ -334,7 +335,7 @@ ng.Grid = function (options) {
     self.multiSelect = self.config.multiSelect;
     self.footerVisible = self.config.footerVisible;
     self.showColumnMenu = self.config.showColumnMenu;
-    self.showMenu = false;
+    self.showMenu = ko.observable(false);
     self.configGroups = ko.observableArray([]);
 
     //Paging
@@ -345,8 +346,10 @@ ng.Grid = function (options) {
     self.headerRowTemplate = self.config.headerRowTemplate || ng.defaultHeaderRowTemplate();
     //scope funcs
     self.visibleColumns = ko.computed(function () {
-        return self.columns().filter(function (col) {
-            return col.visible;
+        var cols = self.columns();
+        return cols.filter(function (col) {
+            var isVis = col.visible();
+            return isVis;
         });
     });
     self.nonAggColumns = ko.computed(function () {
@@ -355,7 +358,7 @@ ng.Grid = function (options) {
         });
     });
     self.toggleShowMenu = function () {
-        self.showMenu = !self.showMenu;
+        self.showMenu(!self.showMenu());
     };
     self.toggleSelectAll = function (a) {
         self.selectionService.toggleSelectAll(a);
@@ -411,6 +414,47 @@ ng.Grid = function (options) {
         }
         return newDim;
     };
+    //footer
+    self.jqueryUITheme = self.config.jqueryUITheme;
+    self.maxRows = Math.max(self.config.pagingOptions.totalServerItems || self.sortedData.length, 1);
+    self.maxRowsDisplay = ko.computed(function () {
+        return self.maxRows;
+    });
+    self.multiSelect = ko.observable((self.config.canSelectRows && self.config.multiSelect));
+    self.selectedItemCount = ko.computed(function () {
+        return self.selectedItemCount;
+    });
+    self.maxPages = ko.computed(function () {
+        self.maxRows = Math.max(self.config.pagingOptions.totalServerItems || self.sortedData.length, 1);
+        return Math.ceil(self.maxRows / self.pagingOptions.pageSize());
+    });
+    self.pageForward = function () {
+        var page = self.config.pagingOptions.currentPage();
+        self.config.pagingOptions.currentPage = Math.min(page + 1, self.maxPages());
+    };
+    self.pageBackward = function () {
+        var page = self.config.pagingOptions.currentPage();
+        self.config.pagingOptions.currentPage = Math.max(page - 1, 1);
+    };
+    self.pageToFirst = function () {
+        self.config.pagingOptions.currentPage = 1;
+    };
+    self.pageToLast = function () {
+        var maxPages = self.maxPages();
+        self.config.pagingOptions.currentPage = maxPages;
+    };
+    self.cantPageForward = ko.computed(function () {
+        var curPage = self.config.pagingOptions.currentPage();
+        var maxPages = self.maxPages();
+        return !(curPage < maxPages);
+    });
+    self.cantPageBackward = ko.computed(function () {
+        var curPage = self.config.pagingOptions.currentPage();
+        return !(curPage > 1);
+    });
+    self.footerStyle = ko.computed(function () {
+        return { "width": self.rootDim.outerWidth + "px", "height": self.config.footerRowHeight + "px" };
+    });
     //call init
     self.init();
 };

@@ -8,7 +8,7 @@
 ng.Aggregate = function (aggEntity, rowFactory) {
     var self = this;
     self.index = 0;
-    self.offsetTop = 0;
+    self.offsetTop = ko.observable(0);
     self.entity = aggEntity;
     self.label = ko.observable(aggEntity.gLabel);
     self.field = aggEntity.gField;
@@ -44,7 +44,7 @@ ng.Aggregate = function (aggEntity, rowFactory) {
         $.each(rowFactory.aggCache, function (i, agg) {
             if (foundMyself) {
                 var offset = (30 * self.children.length);
-                agg.offsetTop = self.collapsed ? agg.offsetTop - offset : agg.offsetTop + offset;
+                agg.offsetTop(self.collapsed ? agg.offsetTop - offset : agg.offsetTop + offset);
             } else {
                 if (i == self.aggIndex) {
                     foundMyself = true;

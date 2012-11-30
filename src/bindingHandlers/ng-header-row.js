@@ -3,7 +3,7 @@
         'init': function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
             var grid = valueAccessor();
             var headerRow = $(grid.headerRowTemplate);
-            ko.applyBindings(viewModel, headerRow[0]);
+            ko.applyBindings(grid, headerRow[0]);
             $(element).append(headerRow);
         }
     };

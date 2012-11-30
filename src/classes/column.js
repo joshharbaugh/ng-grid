@@ -15,7 +15,7 @@
     self.cellFilter = colDef.cellFilter;
     self.field = colDef.field;
     self.aggLabelFilter = colDef.cellFilter || colDef.aggLabelFilter;
-    self.visible = ng.utils.isNullOrUndefined(colDef.visible) || colDef.visible;
+    self.visible = ko.observable(ng.utils.isNullOrUndefined(colDef.visible) || colDef.visible);
     self.sortable = ko.observable(ng.utils.isNullOrUndefined(colDef.sortable) || colDef.sortable);
     self.resizable = ko.observable(ng.utils.isNullOrUndefined(colDef.resizable) || colDef.resizable);
     self.sortDirection = undefined;

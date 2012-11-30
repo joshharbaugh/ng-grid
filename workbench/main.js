@@ -41,20 +41,16 @@ function mainViewModel() {
     });
     self.getPagedDataAsync(self.pagingOptions.pageSize(), self.pagingOptions.currentPage());
     self.gridOptions = {
-    		data: self.myData,
-    		jqueryUITheme: false,
-    		jqueryUIDraggable: false,
+        data: self.myData,
         selectedItems: self.mySelections,
         displaySelectionCheckbox: true,
         multiSelect: true,
-        showGroupPanel: false,
+        showGroupPanel: true,
         showColumnMenu: true,
-        enablePaging: true,
+        showFilter: false,
         maintainColumnRatios: false,
-        filterOptions: self.filterOptions,
-        pagingOptions: self.pagingOptions,
         columnDefs: [{ field: 'name', displayName: 'Very Long Name Title', sortable: false, headerClass: 'foo' },
-                     { field: 'allowance',  aggLabelFilter: 'currency', cellTemplate: 'partials/cellTemplate.html' },
+                     { field: 'allowance',  aggLabelFilter: 'currency'},
                      { field: 'birthday', cellFilter: 'date', resizable: false },
                      { field: 'paid',  cellFilter: 'checkmark' }]
     };

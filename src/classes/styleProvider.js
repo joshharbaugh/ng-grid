@@ -2,9 +2,6 @@
     grid.topPanelStyle = ko.computed(function() {
         return { "height": grid.topPanelHeight() + "px" };
     });
-    //grid.rowStyle = ko.computed(function(row) {
-    //    return { "top": row.offsetTop + "px", "height": grid.rowHeight + "px" };
-    //});
     grid.canvasStyle = ko.computed(function() {
         return { "height": grid.maxCanvasHt.toString() + "px" };
     });

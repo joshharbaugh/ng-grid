@@ -36,8 +36,8 @@ ng.RowFactory = function(grid) {
             // build the row
             row = new ng.Row(entity, self.rowConfig, self.selectionService);
             row.rowIndex = rowIndex + 1; //not a zero-based rowIndex
-            row.offsetTop = self.rowHeight * rowIndex;
-            row.selected = entity[SELECTED_PROP];
+            row.offsetTop(self.rowHeight * rowIndex);
+            row.selected(entity[SELECTED_PROP]);
             // finally cache it for the next round
             self.rowCache[rowIndex] = row;
         }
@@ -52,7 +52,7 @@ ng.RowFactory = function(grid) {
             self.aggCache[aggEntity.aggIndex] = agg;
         }
         agg.index = rowIndex + 1; //not a zero-based rowIndex
-        agg.offsetTop = self.rowHeight * rowIndex;
+        agg.offsetTop(self.rowHeight * rowIndex);
         return agg;
     };
     self.UpdateViewableRange = function(newRange) {
@@ -162,9 +162,9 @@ ng.RowFactory = function(grid) {
         self.numberOfAggregates = 0;
         self.groupedData = {};
         // Here we set the onmousedown event handler to the header container.
-        var data = grid.filteredData;
+        var data = grid.filteredData();
         var maxDepth = groups.length;
-        var cols = grid.columns;
+        var cols = grid.columns();
 
         $.each(data, function (i, item) {
             item[NG_HIDDEN] = true;

@@ -7,7 +7,6 @@
             var grid = new ng.Grid(options);
             var gridElem = $(ng.defaultGridTemplate());
             ng.gridService.StoreGrid(element, grid);
-            grid.footerController = new ng.Footer(grid);
             // if it is a string we can watch for data changes. otherwise you won't be able to update the grid data
             options.data.subscribe(function (a) {
                 if (!a) return;
@@ -33,6 +32,7 @@
             $.each(grid.config.plugins, function (i, p) {
                 p.init(grid);
             });
+            return { controlsDescendantBindings: true };
         }
     };
 }());

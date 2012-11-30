@@ -2,7 +2,7 @@
 * ng-grid JavaScript Library
 * Authors: https://github.com/Crash8308/ng-grid/blob/master/README.md
 * License: MIT (http://www.opensource.org/licenses/mit-license.php)
-* Compiled At: 11/29/2012 18:05:04
+* Compiled At: 11/30/2012 15:34:04
 ***********************************************/
 
 (function(window, undefined){
@@ -169,17 +169,17 @@ $.extend(ng.utils, {
 /***********************************************
 * FILE: ..\src\templates\gridTemplate.html
 ***********************************************/
-ng.defaultGridTemplate = function(){ return '<div data-bind="css: {\'ui-widget\': jqueryUITheme}"><div class="ngTopPanel" data-bind="css: {\'ui-widget-header\':jqueryUITheme, \'ui-corner-top\': jqueryUITheme}, style: $data.topPanelStyle"><div class="ngGroupPanel" data-bind="visible: showGroupPanel, style: headerStyle()"><div class="ngGroupPanelDescription" data-bind="visible: configGroups.length == 0">Drag a column header here and drop it to group by that column</div><ul data-bind="visible: configGroups.length > 0" class="ngGroupList"><li class="ngGroupItem" data-bind="foreach: configGroups"><span class="ngGroupElement"><span class="ngGroupName" data-bind="text: displayName"><span data-bind="click: removeGroup" class="ngRemoveGroup">x</span></span><span data-bind="visible: $index > $parent.configGroups.length" class="ngGroupArrow"></span></span></li></ul></div><div class="ngHeaderContainer" data-bind="style: headerStyle"><div class="ngHeaderScroller" data-bind="style: headerScrollerStyle, ngHeaderRow: $data" ></div></div><div class="ngHeaderButton" data-bind="visible: ($data.showColumnMenu || $data.showFilter), click: toggleShowMenu"><div class="ngHeaderButtonArrow"></div></div><div data-bind="visible: showMenu" class="ngColMenu"><div data-bind="visible: showFilter"><input placeholder="Seach Field:Value" type="text" data-bind="value: filterText"/></div><div data-bind="visible: showColumnMenu"><span class="ngMenuText">Choose Columns:</span><ul class="ngColList"><li class="ngColListItem" data-bind="foreach: nonAggColumns"><label><input type="checkbox" class="ngColListCheckbox" data-bind="value: visible"/><span data-bind="text: displayName"></span><a title="Group By" class="ngGroupIcon" data-bind="visible: field != \'\u2714\', click: $parent.groupBy"></a></label></li></ul></div></div></div><div class="ngViewport" data-bind="css: {\'ui-widget-content\': jqueryUITheme}, style: viewportStyle"><div class="ngCanvas" data-bind="style: canvasStyle"><div data-bind="foreach: renderedRows"><div data-bind="style: { \'top\': offsetTop() + \'px\', \'height\': $parent.rowHeight + \'px\' }, click: row.toggleSelected, css: {\'selected\': row.selected, \'even\': isEven , \'odd\': isOdd }, ngRow: $data" class="ngRow"></div></div></div></div><div data-bind="ngFooter: $data"></div></div>';};
+ng.defaultGridTemplate = function(){ return '<div data-bind="css: {\'ui-widget\': jqueryUITheme}"><div class="ngTopPanel" data-bind="css: {\'ui-widget-header\':jqueryUITheme, \'ui-corner-top\': jqueryUITheme}, style: $data.topPanelStyle"><div class="ngGroupPanel" data-bind="visible: showGroupPanel, style: headerStyle()"><div class="ngGroupPanelDescription" data-bind="visible: configGroups.length == 0">Drag a column header here and drop it to group by that column</div><ul data-bind="visible: configGroups.length > 0" class="ngGroupList"><li class="ngGroupItem" data-bind="foreach: configGroups"><span class="ngGroupElement"><span class="ngGroupName" data-bind="text: displayName"><span data-bind="click: removeGroup" class="ngRemoveGroup">x</span></span><span data-bind="visible: $index > $parent.configGroups.length" class="ngGroupArrow"></span></span></li></ul></div><div class="ngHeaderContainer" data-bind="style: headerStyle"><div class="ngHeaderScroller" data-bind="style: headerScrollerStyle, ngHeaderRow: $data" ></div></div><div class="ngHeaderButton" data-bind="visible: ($data.showColumnMenu || $data.showFilter), click: toggleShowMenu"><div class="ngHeaderButtonArrow"></div></div><div data-bind="visible: showMenu" class="ngColMenu"><div data-bind="visible: showFilter"><input placeholder="Seach Field:Value" type="text" data-bind="value: filterText"/></div><div data-bind="visible: showColumnMenu"><span class="ngMenuText">Choose Columns:</span><ul class="ngColList"><li class="ngColListItem" data-bind="foreach: nonAggColumns"><label><input type="checkbox" class="ngColListCheckbox" data-bind="value: visible"/><span data-bind="text: displayName"></span><a title="Group By" class="ngGroupIcon" data-bind="visible: (field != \'\u2714\'), click: $parent.groupBy"></a></label></li></ul></div></div></div><div class="ngViewport" data-bind="css: {\'ui-widget-content\': jqueryUITheme}, style: viewportStyle"><div class="ngCanvas" data-bind="style: canvasStyle"><div data-bind="foreach: renderedRows"><div data-bind="style: { \'top\': offsetTop, \'height\': $parent.rowHeight + \'px\' }, click: toggleSelected, css: {\'selected\': selected, \'even\': isEven , \'odd\': isOdd }, ngRow: $data" class="ngRow"></div></div></div></div><div class="ngFooterPanel" data-bind="ngFooter: $data, css: {\'ui-widget-content\': jqueryUITheme, \'ui-corner-bottom\': jqueryUITheme}, style: footerStyle"><div class="ngTotalSelectContainer" data-bind="visible: footerVisible"><div class="ngFooterTotalItems" data-bind="css: {\'ngNoMultiSelect\': !multiSelect}" ><span class="ngLabel">Total Items: <span data-bind="text: maxRowsDisplay"></span></span><span data-bind="visible: filterText.length > 0" class="ngLabel">(Showing: <span data-bind="text: totalFilteredItemsLength"></span>)</span></div><div class="ngFooterSelectedItems" data-bind="visible: multiSelect"><span class="ngLabel">Selected Items: <span data-bind="text: selectedItemCount"></span>{{}}</span></div></div><div class="ngPagerContainer" style="float: right; margin-top: 10px;" data-bind="visible: (footerVisible && enablePaging), css: {\'ngNoMultiSelect\': !multiSelect}"><div style="float:left; margin-right: 10px;" class="ngRowCountPicker"><span style="float: left; margin-top: 3px;" class="ngLabel">Page Size:</span><select style="float: left;height: 27px; width: 100px" data-bind="value: pagingOptions.pageSize, options: pagingOptions.pageSizes"></select></div><div style="float:left; margin-right: 10px; line-height:25px;" class="ngPagerControl" style="float: left; min-width: 135px;"><button class="ngPagerButton" data-bind="click: pageToFirst, disable: cantPageBackward()" title="First Page"><div class="ngPagerFirstTriangle"><div class="ngPagerFirstBar"></div></div></button><button class="ngPagerButton" data-bind="click: pageBackward, disable: cantPageBackward()" title="Previous Page"><div class="ngPagerFirstTriangle ngPagerPrevTriangle"></div></button><input class="ngPagerCurrent" type="text" style="width:50px; height: 24px; margin-top: 1px; padding: 0px 4px;" data-bind="value: pagingOptions.currentPage"/><button class="ngPagerButton" data-bind="click: pageForward, disable: cantPageForward()" title="Next Page"><div class="ngPagerLastTriangle ngPagerNextTriangle"></div></button><button class="ngPagerButton" data-bind="click: pageToLast, disable: cantPageForward()" title="Last Page"><div class="ngPagerLastTriangle"><div class="ngPagerLastBar"></div></div></button></div></div></div></div>';};
 
 /***********************************************
 * FILE: ..\src\templates\rowTemplate.html
 ***********************************************/
-ng.defaultRowTemplate = function(){ return '<div data-bind="foreach: col in $root.visibleColumns, attr: { \'class\': \'ngCell col\' + $index + \' \' + $data.cellClass }, css: { \'ui-widget-content\':jqueryUITheme }, ngCell: $data"></div>';};
+ng.defaultRowTemplate = function(){ return '<div data-bind="foreach: $parent.visibleColumns, css: { \'ui-widget-content\': $parent.jqueryUITheme }"><div data-bind="attr: { \'class\': \'ngCell col\' + $index + \' \' + $data.cellClass }, ngCell: $data"></div></div>';};
 
 /***********************************************
 * FILE: ..\src\templates\cellTemplate.html
 ***********************************************/
-ng.defaultCellTemplate = function(){ return '<div data-bind="attr: { \'class\': \'ngCellText colt\' + $index}, html: col.getProperty($data)"></div>';};
+ng.defaultCellTemplate = function(){ return '<div data-bind="attr: { \'class\': \'ngCellText colt\' + $index}, html: $parent.getProperty($data.field)"></div>';};
 
 /***********************************************
 * FILE: ..\src\templates\aggregateTemplate.html
@@ -197,17 +197,12 @@ ng.defaultHeaderRowTemplate = function(){ return '<div data-bind="foreach: visib
 ng.defaultHeaderCellTemplate = function(){ return '<div data-bind="click: sort, css: { \'ngSorted\': !noSortVisible }, attr: {\'class\': \'ngHeaderSortColumn \' + headerClass}" class=""><div data-bind="attr: { \'class\': \'colt\' + $index + \' ngHeaderText\' }, html: $data.displayName"></div><div class="ngSortButtonDown" data-bind="visible: $data.showSortButtonDown"></div><div class="ngSortButtonUp" data-bind="visible: $data.showSortButtonUp"></div></div><div data-bind="visible: resizable, click: $data.gripClick, event: { onmousedown: gripOnMouseDown }" class="ngHeaderGrip" ></div>';};
 
 /***********************************************
-* FILE: ..\src\templates\footerTemplate.html
-***********************************************/
-ng.defaultFooterTemplate = function(){ return '<div class="ngFooterPanel" data-bind="ngFooter: $data, css: {\'ui-widget-content\': jqueryUITheme, \'ui-corner-bottom\': jqueryUITheme}, style: footerStyle"><div class="ngTotalSelectContainer" data-bind="visible: footerVisible"><div class="ngFooterTotalItems" data-bind="css: {\'ngNoMultiSelect\': !multiSelect}" ><span class="ngLabel">Total Items: <span data-bind="text: maxRowsDisplay"></span></span><span data-bind="visible: filterText.length > 0" class="ngLabel">(Showing: <span data-bind="text: totalFilteredItemsLength"></span>)</span></div><div class="ngFooterSelectedItems" data-bind="visible: multiSelect"><span class="ngLabel">Selected Items: <span data-bind="text: selectedItemCount"></span>{{}}</span></div></div><div class="ngPagerContainer" style="float: right; margin-top: 10px;" data-bind="visible: (footerVisible && enablePaging), css: {\'ngNoMultiSelect\': !multiSelect}"><div style="float:left; margin-right: 10px;" class="ngRowCountPicker"><span style="float: left; margin-top: 3px;" class="ngLabel">Page Size:</span><select style="float: left;height: 27px; width: 100px" data-bind="value: pagingOptions.pageSize, options: pagingOptions.pageSizes"></select></div><div style="float:left; margin-right: 10px; line-height:25px;" class="ngPagerControl" style="float: left; min-width: 135px;"><button class="ngPagerButton" data-bind="click: pageToFirst, disable: cantPageBackward()" title="First Page"><div class="ngPagerFirstTriangle"><div class="ngPagerFirstBar"></div></div></button><button class="ngPagerButton" data-bind="click: pageBackward, disable: cantPageBackward()" title="Previous Page"><div class="ngPagerFirstTriangle ngPagerPrevTriangle"></div></button><input class="ngPagerCurrent" type="text" style="width:50px; height: 24px; margin-top: 1px; padding: 0px 4px;" data-bind="value: pagingOptions.currentPage"/><button class="ngPagerButton" data-bind="click: pageForward, disable: cantPageForward()" title="Next Page"><div class="ngPagerLastTriangle ngPagerNextTriangle"></div></button><button class="ngPagerButton" data-bind="click: pageToLast, disable: cantPageForward()" title="Last Page"><div class="ngPagerLastTriangle"><div class="ngPagerLastBar"></div></div></button></div></div></div>';};
-
-/***********************************************
 * FILE: ..\src\classes\aggregate.js
 ***********************************************/
 ng.Aggregate = function (aggEntity, rowFactory) {
     var self = this;
     self.index = 0;
-    self.offsetTop = 0;
+    self.offsetTop = ko.observable(0);
     self.entity = aggEntity;
     self.label = ko.observable(aggEntity.gLabel);
     self.field = aggEntity.gField;
@@ -243,7 +238,7 @@ ng.Aggregate = function (aggEntity, rowFactory) {
         $.each(rowFactory.aggCache, function (i, agg) {
             if (foundMyself) {
                 var offset = (30 * self.children.length);
-                agg.offsetTop = self.collapsed ? agg.offsetTop - offset : agg.offsetTop + offset;
+                agg.offsetTop(self.collapsed ? agg.offsetTop - offset : agg.offsetTop + offset);
             } else {
                 if (i == self.aggIndex) {
                     foundMyself = true;
@@ -505,7 +500,7 @@ ng.Column = function (config, grid) {
     self.cellFilter = colDef.cellFilter;
     self.field = colDef.field;
     self.aggLabelFilter = colDef.cellFilter || colDef.aggLabelFilter;
-    self.visible = ng.utils.isNullOrUndefined(colDef.visible) || colDef.visible;
+    self.visible = ko.observable(ng.utils.isNullOrUndefined(colDef.visible) || colDef.visible);
     self.sortable = ko.observable(ng.utils.isNullOrUndefined(colDef.sortable) || colDef.sortable);
     self.resizable = ko.observable(ng.utils.isNullOrUndefined(colDef.resizable) || colDef.resizable);
     self.sortDirection = undefined;
@@ -594,53 +589,6 @@ ng.Dimension = function (options) {
 };
 
 /***********************************************
-* FILE: ..\src\classes\footer.js
-***********************************************/
-ng.Footer = function (grid) {
-    var self = this;
-    self.jqueryUITheme = grid.config.jqueryUITheme;
-    self.maxRows = Math.max(grid.config.pagingOptions.totalServerItems || grid.sortedData.length, 1);
-    self.maxRowsDisplay = ko.computed(function() {
-        return self.maxRows;
-    });
-    self.multiSelect = ko.observable((grid.config.canSelectRows && grid.config.multiSelect));
-    self.selectedItemCount = ko.computed(function() {
-        return grid.selectedItemCount;
-    });
-    self.maxPages = ko.computed(function () {
-        self.maxRows = Math.max(grid.config.pagingOptions.totalServerItems || grid.sortedData.length, 1);
-        return Math.ceil(self.maxRows / grid.pagingOptions.pageSize());
-    });
-    self.pageForward = function() {
-        var page = grid.config.pagingOptions.currentPage();
-        grid.config.pagingOptions.currentPage = Math.min(page + 1, self.maxPages());
-    };
-    self.pageBackward = function () {
-        var page = grid.config.pagingOptions.currentPage();
-        grid.config.pagingOptions.currentPage = Math.max(page - 1, 1);
-    };
-    self.pageToFirst = function () {
-        grid.config.pagingOptions.currentPage = 1;
-    };
-    self.pageToLast = function () {
-        var maxPages = self.maxPages();
-        grid.config.pagingOptions.currentPage = maxPages;
-    };
-    self.cantPageForward = ko.computed(function () {
-        var curPage = grid.config.pagingOptions.currentPage();
-        var maxPages = self.maxPages();
-        return !(curPage < maxPages);
-    });
-    self.cantPageBackward = ko.computed(function () {
-        var curPage = grid.config.pagingOptions.currentPage();
-        return !(curPage > 1);
-    });
-    self.footerStyle = ko.computed(function () {
-        return { "width": grid.rootDim.outerWidth + "px", "height": grid.config.footerRowHeight + "px" };
-    });
-};
-
-/***********************************************
 * FILE: ..\src\classes\rowFactory.js
 ***********************************************/
 ng.RowFactory = function(grid) {
@@ -676,8 +624,8 @@ ng.RowFactory = function(grid) {
             // build the row
             row = new ng.Row(entity, self.rowConfig, self.selectionService);
             row.rowIndex = rowIndex + 1; //not a zero-based rowIndex
-            row.offsetTop = self.rowHeight * rowIndex;
-            row.selected = entity[SELECTED_PROP];
+            row.offsetTop(self.rowHeight * rowIndex);
+            row.selected(entity[SELECTED_PROP]);
             // finally cache it for the next round
             self.rowCache[rowIndex] = row;
         }
@@ -692,7 +640,7 @@ ng.RowFactory = function(grid) {
             self.aggCache[aggEntity.aggIndex] = agg;
         }
         agg.index = rowIndex + 1; //not a zero-based rowIndex
-        agg.offsetTop = self.rowHeight * rowIndex;
+        agg.offsetTop(self.rowHeight * rowIndex);
         return agg;
     };
     self.UpdateViewableRange = function(newRange) {
@@ -802,9 +750,9 @@ ng.RowFactory = function(grid) {
         self.numberOfAggregates = 0;
         self.groupedData = {};
         // Here we set the onmousedown event handler to the header container.
-        var data = grid.filteredData;
+        var data = grid.filteredData();
         var maxDepth = groups.length;
-        var cols = grid.columns;
+        var cols = grid.columns();
 
         $.each(data, function (i, item) {
             item[NG_HIDDEN] = true;
@@ -873,8 +821,8 @@ ng.Grid = function (options) {
             afterSelectionChange: function () { return true;},
             rowTemplate: undefined,
             headerRowTemplate: undefined,
-            jqueryUITheme: ko.observable(false),
-            jqueryUIDraggable: ko.observable(false),
+            jqueryUITheme: false,
+            jqueryUIDraggable: false,
             plugins: [],
             keepLastSelected: true,
             groups: [],
@@ -883,7 +831,7 @@ ng.Grid = function (options) {
             showColumnMenu: ko.observable(true),
             showFilter: ko.observable(true),
             filterOptions: {
-                filterText: "",
+                filterText: ko.observable(""),
                 useExternalFilter: false,
             },
             //Paging 
@@ -911,12 +859,12 @@ ng.Grid = function (options) {
     self.$canvas = null;
     self.rootDim = self.config.gridDim;
     self.sortInfo = self.config.sortInfo;
-    self.sortedData = [];
+    self.sortedData = ko.observableArray([]);
     self.lateBindColumns = false;
-    self.filteredData = [];
+    self.filteredData = ko.observableArray([]);
     self.lastSortedColumn = undefined;
     self.showFilter = self.config.showFilter;
-    self.filterText = self.config.filterText;
+    self.filterText = self.config.filterOptions.filterText;
     self.calcMaxCanvasHeight = function() {
         return (self.config.groups.length > 0) ? (self.rowFactory.parsedData.filter(function (e) {
             return e[NG_HIDDEN] === false;
@@ -938,7 +886,7 @@ ng.Grid = function (options) {
     }
     //self funcs
     self.setRenderedRows = function (newRows) {
-        self.renderedRows = newRows;
+        self.renderedRows(newRows);
         self.refreshDomSizes();
     };
     self.minRowsToRender = function () {
@@ -1176,7 +1124,7 @@ ng.Grid = function (options) {
     self.multiSelect = self.config.multiSelect;
     self.footerVisible = self.config.footerVisible;
     self.showColumnMenu = self.config.showColumnMenu;
-    self.showMenu = false;
+    self.showMenu = ko.observable(false);
     self.configGroups = ko.observableArray([]);
 
     //Paging
@@ -1187,8 +1135,10 @@ ng.Grid = function (options) {
     self.headerRowTemplate = self.config.headerRowTemplate || ng.defaultHeaderRowTemplate();
     //scope funcs
     self.visibleColumns = ko.computed(function () {
-        return self.columns().filter(function (col) {
-            return col.visible;
+        var cols = self.columns();
+        return cols.filter(function (col) {
+            var isVis = col.visible();
+            return isVis;
         });
     });
     self.nonAggColumns = ko.computed(function () {
@@ -1197,7 +1147,7 @@ ng.Grid = function (options) {
         });
     });
     self.toggleShowMenu = function () {
-        self.showMenu = !self.showMenu;
+        self.showMenu(!self.showMenu());
     };
     self.toggleSelectAll = function (a) {
         self.selectionService.toggleSelectAll(a);
@@ -1253,6 +1203,47 @@ ng.Grid = function (options) {
         }
         return newDim;
     };
+    //footer
+    self.jqueryUITheme = self.config.jqueryUITheme;
+    self.maxRows = Math.max(self.config.pagingOptions.totalServerItems || self.sortedData.length, 1);
+    self.maxRowsDisplay = ko.computed(function () {
+        return self.maxRows;
+    });
+    self.multiSelect = ko.observable((self.config.canSelectRows && self.config.multiSelect));
+    self.selectedItemCount = ko.computed(function () {
+        return self.selectedItemCount;
+    });
+    self.maxPages = ko.computed(function () {
+        self.maxRows = Math.max(self.config.pagingOptions.totalServerItems || self.sortedData.length, 1);
+        return Math.ceil(self.maxRows / self.pagingOptions.pageSize());
+    });
+    self.pageForward = function () {
+        var page = self.config.pagingOptions.currentPage();
+        self.config.pagingOptions.currentPage = Math.min(page + 1, self.maxPages());
+    };
+    self.pageBackward = function () {
+        var page = self.config.pagingOptions.currentPage();
+        self.config.pagingOptions.currentPage = Math.max(page - 1, 1);
+    };
+    self.pageToFirst = function () {
+        self.config.pagingOptions.currentPage = 1;
+    };
+    self.pageToLast = function () {
+        var maxPages = self.maxPages();
+        self.config.pagingOptions.currentPage = maxPages;
+    };
+    self.cantPageForward = ko.computed(function () {
+        var curPage = self.config.pagingOptions.currentPage();
+        var maxPages = self.maxPages();
+        return !(curPage < maxPages);
+    });
+    self.cantPageBackward = ko.computed(function () {
+        var curPage = self.config.pagingOptions.currentPage();
+        return !(curPage > 1);
+    });
+    self.footerStyle = ko.computed(function () {
+        return { "width": self.rootDim.outerWidth + "px", "height": self.config.footerRowHeight + "px" };
+    });
     //call init
     self.init();
 };
@@ -1301,7 +1292,7 @@ ng.Row = function (entity, config, selectionService) {
         return false;
     };
     self.rowIndex = 0;
-    self.offsetTop = 0;
+    self.offsetTop = ko.observable(0);
     self.rowDisplayIndex = 0;
     self.isEven = ko.computed(function () {
         if (self.rowIndex % 2 == 0) return true;
@@ -1459,9 +1450,6 @@ ng.StyleProvider = function(grid) {
     grid.topPanelStyle = ko.computed(function() {
         return { "height": grid.topPanelHeight() + "px" };
     });
-    //grid.rowStyle = ko.computed(function(row) {
-    //    return { "top": row.offsetTop + "px", "height": grid.rowHeight + "px" };
-    //});
     grid.canvasStyle = ko.computed(function() {
         return { "height": grid.maxCanvasHt.toString() + "px" };
     });
@@ -1831,7 +1819,6 @@ ko.bindingHandlers['ngGrid'] = (function () {
             var grid = new ng.Grid(options);
             var gridElem = $(ng.defaultGridTemplate());
             ng.gridService.StoreGrid(element, grid);
-            grid.footerController = new ng.Footer(grid);
             // if it is a string we can watch for data changes. otherwise you won't be able to update the grid data
             options.data.subscribe(function (a) {
                 if (!a) return;
@@ -1857,6 +1844,7 @@ ko.bindingHandlers['ngGrid'] = (function () {
             $.each(grid.config.plugins, function (i, p) {
                 p.init(grid);
             });
+            return { controlsDescendantBindings: true };
         }
     };
 }());
@@ -1868,7 +1856,7 @@ ko.bindingHandlers['ngRow'] = (function () {
     return {
         'init': function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
             var row = valueAccessor();
-            var grid = viewModel.$parent;
+            var grid = row.$parent = bindingContext.$parent;
             var html;
             if (row.isAggRow) {
                 html = ng.aggregateTemplate();
@@ -1894,8 +1882,9 @@ ko.bindingHandlers['ngCell'] = (function () {
     return {
         'init': function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
             var col = valueAccessor();
+            col.$parent = bindingContext.$parent;
             var cell = $(col.cellTemplate);
-            ko.applyBindings(viewModel, cell[0]);
+            ko.applyBindings(col, cell[0]);
             $(element).append(cell);
         }
     };
@@ -1909,7 +1898,7 @@ ko.bindingHandlers['ngHeaderRow'] = (function () {
         'init': function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
             var grid = valueAccessor();
             var headerRow = $(grid.headerRowTemplate);
-            ko.applyBindings(viewModel, headerRow[0]);
+            ko.applyBindings(grid, headerRow[0]);
             $(element).append(headerRow);
         }
     };
@@ -1926,20 +1915,6 @@ ko.bindingHandlers['ngHeaderCell'] = (function () {
             var headerCell = $(col.headerCellTemplate);
             ko.applyBindings(viewModel, headerCell[0]);
             $(element).append(headerCell);
-        }
-    };
-}());
-
-/***********************************************
-* FILE: ..\src\bindingHandlers\ng-footer.js
-***********************************************/
-ko.bindingHandlers['ngFooter'] = (function () {
-    return {
-        'init': function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-            var footer = valueAccessor();
-            var footerElem = $(ng.defaultFooterTemplate());
-            ko.applyBindings(footer, footerElem[0]);
-            $(element).append(footerElem);
         }
     };
 }());
