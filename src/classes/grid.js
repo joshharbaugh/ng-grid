@@ -380,7 +380,7 @@ ng.Grid = function (options) {
         return Math.max(0, self.rootDim.outerHeight - self.topPanelHeight() - self.config.footerRowHeight - 2);
     });
     self.groupBy = function(col) {
-        var indx = self.configGroups.indexOf(col);
+        var indx = self.configGroups().indexOf(col);
         if (indx == -1) {
             self.configGroups.push(col);
         } else {

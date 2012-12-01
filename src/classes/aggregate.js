@@ -61,7 +61,7 @@ ng.Aggregate = function (aggEntity, rowFactory) {
             var i = 0;
             var recurse = function (cur) {
                 if (cur.aggChildren.length > 0) {
-                    $.each(cur.aggChildren, function (i, a) {
+                    $.each(cur.aggChildren, function (x, a) {
                         recurse(a);
                     });
                 } else {
@@ -74,4 +74,8 @@ ng.Aggregate = function (aggEntity, rowFactory) {
             return self.children.length;
         }
     });
+    self.selected = ko.observable(false);
+    self.isEven = ko.observable(false);
+    self.isOdd = ko.observable(false);
+    self.toggleSelected = function () { return true; };
 }; 

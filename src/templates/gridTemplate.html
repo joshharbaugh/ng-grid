@@ -9,7 +9,7 @@
                         <span class="ngGroupName" data-bind="text: displayName">
                             <span data-bind="click: removeGroup" class="ngRemoveGroup">x</span>
                         </span>
-                        <span data-bind="visible: $index > $parent.configGroups.length" class="ngGroupArrow"></span>
+                        <span data-bind="visible: $index() > $parent.configGroups.length" class="ngGroupArrow"></span>
                     </span>
                 </li>
             </ul>
@@ -28,8 +28,10 @@
                 <span class="ngMenuText">Choose Columns:</span>
                 <ul class="ngColList">
                     <li class="ngColListItem" data-bind="foreach: nonAggColumns">
-                        <label>
-                            <input type="checkbox" class="ngColListCheckbox" data-bind="value: visible"/><span data-bind="text: displayName"></span><a title="Group By" class="ngGroupIcon" data-bind="visible: (field != '\u2714'), click: $parent.groupBy"></a>
+                        <label style="position: relative;">
+                            <input type="checkbox" class="ngColListCheckbox" data-bind="checked: visible"/>
+                            <span data-bind="text: displayName, click: toggleVisible"></span>
+                            <a title="Group By" class="ngGroupIcon" data-bind="visible: (field != '\u2714'), click: $parent.groupBy"></a>
                         </label>
                     </li>
                 </ul>

@@ -2,7 +2,7 @@
 * ng-grid JavaScript Library
 * Authors: https://github.com/Crash8308/ng-grid/blob/master/README.md
 * License: MIT (http://www.opensource.org/licenses/mit-license.php)
-* Compiled At: 11/30/2012 20:35:30
+* Compiled At: 11/30/2012 21:35:17
 ***********************************************/
 
 (function(window, undefined){
@@ -170,12 +170,12 @@ $.extend(ng.utils, {
 /***********************************************
 * FILE: ..\src\templates\gridTemplate.html
 ***********************************************/
-ng.defaultGridTemplate = function(){ return '<div data-bind="css: {\'ui-widget\': jqueryUITheme}"><div class="ngTopPanel" data-bind="css: {\'ui-widget-header\':jqueryUITheme, \'ui-corner-top\': jqueryUITheme}, style: $data.topPanelStyle"><div class="ngGroupPanel" data-bind="visible: showGroupPanel, style: headerStyle()"><div class="ngGroupPanelDescription" data-bind="visible: configGroups.length == 0">Drag a column header here and drop it to group by that column</div><ul data-bind="visible: configGroups.length > 0" class="ngGroupList"><li class="ngGroupItem" data-bind="foreach: configGroups"><span class="ngGroupElement"><span class="ngGroupName" data-bind="text: displayName"><span data-bind="click: removeGroup" class="ngRemoveGroup">x</span></span><span data-bind="visible: $index > $parent.configGroups.length" class="ngGroupArrow"></span></span></li></ul></div><div class="ngHeaderContainer" data-bind="style: headerStyle"><div class="ngHeaderScroller" data-bind="style: headerScrollerStyle, ngHeaderRow: $data" ></div></div><div class="ngHeaderButton" data-bind="visible: ($data.showColumnMenu || $data.showFilter), click: toggleShowMenu"><div class="ngHeaderButtonArrow"></div></div><div data-bind="visible: showMenu" class="ngColMenu"><div data-bind="visible: showFilter"><input placeholder="Seach Field:Value" type="text" data-bind="value: filterText"/></div><div data-bind="visible: showColumnMenu"><span class="ngMenuText">Choose Columns:</span><ul class="ngColList"><li class="ngColListItem" data-bind="foreach: nonAggColumns"><label><input type="checkbox" class="ngColListCheckbox" data-bind="value: visible"/><span data-bind="text: displayName"></span><a title="Group By" class="ngGroupIcon" data-bind="visible: (field != \'\u2714\'), click: $parent.groupBy"></a></label></li></ul></div></div></div><div class="ngViewport" data-bind="css: {\'ui-widget-content\': jqueryUITheme}, style: viewportStyle"><div class="ngCanvas" data-bind="style: canvasStyle"><div data-bind="foreach: renderedRows"><div data-bind="style: { \'top\': offsetTop, \'height\': $parent.rowHeight + \'px\' }, click: toggleSelected, css: {\'selected\': selected, \'even\': isEven , \'odd\': isOdd }, ngRow: $data" class="ngRow"></div></div></div></div><div class="ngFooterPanel" data-bind="ngFooter: $data, css: {\'ui-widget-content\': jqueryUITheme, \'ui-corner-bottom\': jqueryUITheme}, style: footerStyle"><div class="ngTotalSelectContainer" data-bind="visible: footerVisible"><div class="ngFooterTotalItems" data-bind="css: {\'ngNoMultiSelect\': !multiSelect}" ><span class="ngLabel">Total Items: <span data-bind="text: maxRowsDisplay"></span></span><span data-bind="visible: filterText.length > 0" class="ngLabel">(Showing: <span data-bind="text: totalFilteredItemsLength"></span>)</span></div><div class="ngFooterSelectedItems" data-bind="visible: multiSelect"><span class="ngLabel">Selected Items: <span data-bind="text: selectedItemCount"></span></span></div></div><div class="ngPagerContainer" style="float: right; margin-top: 10px;" data-bind="visible: (footerVisible && enablePaging), css: {\'ngNoMultiSelect\': !multiSelect}"><div style="float:left; margin-right: 10px;" class="ngRowCountPicker"><span style="float: left; margin-top: 3px;" class="ngLabel">Page Size:</span><select style="float: left;height: 27px; width: 100px" data-bind="value: pagingOptions.pageSize, options: pagingOptions.pageSizes"></select></div><div style="float:left; margin-right: 10px; line-height:25px;" class="ngPagerControl" style="float: left; min-width: 135px;"><button class="ngPagerButton" data-bind="click: pageToFirst, disable: cantPageBackward()" title="First Page"><div class="ngPagerFirstTriangle"><div class="ngPagerFirstBar"></div></div></button><button class="ngPagerButton" data-bind="click: pageBackward, disable: cantPageBackward()" title="Previous Page"><div class="ngPagerFirstTriangle ngPagerPrevTriangle"></div></button><input class="ngPagerCurrent" type="text" style="width:50px; height: 24px; margin-top: 1px; padding: 0px 4px;" data-bind="value: pagingOptions.currentPage"/><button class="ngPagerButton" data-bind="click: pageForward, disable: cantPageForward()" title="Next Page"><div class="ngPagerLastTriangle ngPagerNextTriangle"></div></button><button class="ngPagerButton" data-bind="click: pageToLast, disable: cantPageForward()" title="Last Page"><div class="ngPagerLastTriangle"><div class="ngPagerLastBar"></div></div></button></div></div></div></div>';};
+ng.defaultGridTemplate = function(){ return '<div data-bind="css: {\'ui-widget\': jqueryUITheme}"><div class="ngTopPanel" data-bind="css: {\'ui-widget-header\':jqueryUITheme, \'ui-corner-top\': jqueryUITheme}, style: $data.topPanelStyle"><div class="ngGroupPanel" data-bind="visible: showGroupPanel, style: headerStyle()"><div class="ngGroupPanelDescription" data-bind="visible: configGroups.length == 0">Drag a column header here and drop it to group by that column</div><ul data-bind="visible: configGroups.length > 0" class="ngGroupList"><li class="ngGroupItem" data-bind="foreach: configGroups"><span class="ngGroupElement"><span class="ngGroupName" data-bind="text: displayName"><span data-bind="click: removeGroup" class="ngRemoveGroup">x</span></span><span data-bind="visible: $index() > $parent.configGroups.length" class="ngGroupArrow"></span></span></li></ul></div><div class="ngHeaderContainer" data-bind="style: headerStyle"><div class="ngHeaderScroller" data-bind="style: headerScrollerStyle, ngHeaderRow: $data" ></div></div><div class="ngHeaderButton" data-bind="visible: ($data.showColumnMenu || $data.showFilter), click: toggleShowMenu"><div class="ngHeaderButtonArrow"></div></div><div data-bind="visible: showMenu" class="ngColMenu"><div data-bind="visible: showFilter"><input placeholder="Seach Field:Value" type="text" data-bind="value: filterText"/></div><div data-bind="visible: showColumnMenu"><span class="ngMenuText">Choose Columns:</span><ul class="ngColList"><li class="ngColListItem" data-bind="foreach: nonAggColumns"><label style="position: relative;"><input type="checkbox" class="ngColListCheckbox" data-bind="checked: visible"/><span data-bind="text: displayName, click: toggleVisible"></span><a title="Group By" class="ngGroupIcon" data-bind="visible: (field != \'\u2714\'), click: $parent.groupBy"></a></label></li></ul></div></div></div><div class="ngViewport" data-bind="css: {\'ui-widget-content\': jqueryUITheme}, style: viewportStyle"><div class="ngCanvas" data-bind="style: canvasStyle"><div data-bind="foreach: renderedRows"><div data-bind="style: { \'top\': offsetTop, \'height\': $parent.rowHeight + \'px\' }, click: toggleSelected, css: {\'selected\': selected, \'even\': isEven , \'odd\': isOdd }, ngRow: $data" class="ngRow"></div></div></div></div><div class="ngFooterPanel" data-bind="ngFooter: $data, css: {\'ui-widget-content\': jqueryUITheme, \'ui-corner-bottom\': jqueryUITheme}, style: footerStyle"><div class="ngTotalSelectContainer" data-bind="visible: footerVisible"><div class="ngFooterTotalItems" data-bind="css: {\'ngNoMultiSelect\': !multiSelect}" ><span class="ngLabel">Total Items: <span data-bind="text: maxRowsDisplay"></span></span><span data-bind="visible: filterText.length > 0" class="ngLabel">(Showing: <span data-bind="text: totalFilteredItemsLength"></span>)</span></div><div class="ngFooterSelectedItems" data-bind="visible: multiSelect"><span class="ngLabel">Selected Items: <span data-bind="text: selectedItemCount"></span></span></div></div><div class="ngPagerContainer" style="float: right; margin-top: 10px;" data-bind="visible: (footerVisible && enablePaging), css: {\'ngNoMultiSelect\': !multiSelect}"><div style="float:left; margin-right: 10px;" class="ngRowCountPicker"><span style="float: left; margin-top: 3px;" class="ngLabel">Page Size:</span><select style="float: left;height: 27px; width: 100px" data-bind="value: pagingOptions.pageSize, options: pagingOptions.pageSizes"></select></div><div style="float:left; margin-right: 10px; line-height:25px;" class="ngPagerControl" style="float: left; min-width: 135px;"><button class="ngPagerButton" data-bind="click: pageToFirst, disable: cantPageBackward()" title="First Page"><div class="ngPagerFirstTriangle"><div class="ngPagerFirstBar"></div></div></button><button class="ngPagerButton" data-bind="click: pageBackward, disable: cantPageBackward()" title="Previous Page"><div class="ngPagerFirstTriangle ngPagerPrevTriangle"></div></button><input class="ngPagerCurrent" type="text" style="width:50px; height: 24px; margin-top: 1px; padding: 0px 4px;" data-bind="value: pagingOptions.currentPage"/><button class="ngPagerButton" data-bind="click: pageForward, disable: cantPageForward()" title="Next Page"><div class="ngPagerLastTriangle ngPagerNextTriangle"></div></button><button class="ngPagerButton" data-bind="click: pageToLast, disable: cantPageForward()" title="Last Page"><div class="ngPagerLastTriangle"><div class="ngPagerLastBar"></div></div></button></div></div></div></div>';};
 
 /***********************************************
 * FILE: ..\src\templates\rowTemplate.html
 ***********************************************/
-ng.defaultRowTemplate = function(){ return '<div data-bind="foreach: $parent.visibleColumns, css: { \'ui-widget-content\': $parent.jqueryUITheme }"><div data-bind="attr: { \'class\': \'ngCell col\' + $index() + \' \' + $data.cellClass() }, ngCell: $data"></div></div>';};
+ng.defaultRowTemplate = function(){ return '<div data-bind="foreach: $grid.visibleColumns, css: { \'ui-widget-content\': $grid.jqueryUITheme }"><div data-bind="attr: { \'class\': \'ngCell col\' + $index() + \' \' + cellClass() }, ngCell: $data"></div></div>';};
 
 /***********************************************
 * FILE: ..\src\templates\cellTemplate.html
@@ -185,7 +185,7 @@ ng.defaultCellTemplate = function(){ return '<div data-bind="attr: { \'class\': 
 /***********************************************
 * FILE: ..\src\templates\aggregateTemplate.html
 ***********************************************/
-ng.aggregateTemplate = function(){ return '<div data-bind="click: $data.toggleExpand, style: {\'left\': $data.offsetleft}" class="ngAggregate"><span class="ngAggregateText" data-bind="html: $data.label">(<span data-bind="html: totalChildren"></span> Items)</span><div data-bind="attr: {\'class\': aggClass"></div></div>';};
+ng.aggregateTemplate = function(){ return '<div data-bind="click: $data.toggleExpand, style: {\'left\': $data.offsetleft}, attr: {\'class\': \'ngAggregate \' + aggClass}" class=""><span class="ngAggregateText" data-bind="html: $data.label">(<span data-bind="html: totalChildren"></span> Items)</span><div data-bind=""></div></div>';};
 
 /***********************************************
 * FILE: ..\src\templates\headerRowTemplate.html
@@ -246,7 +246,7 @@ ko.bindingHandlers['ngRow'] = (function () {
     return {
         'init': function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
             var row = valueAccessor();
-            var grid = row.$parent = bindingContext.$parent;
+            var grid = row.$grid = bindingContext.$parent;
             var html;
             if (row.isAggRow) {
                 html = ng.aggregateTemplate();
@@ -387,7 +387,7 @@ ng.Aggregate = function (aggEntity, rowFactory) {
             var i = 0;
             var recurse = function (cur) {
                 if (cur.aggChildren.length > 0) {
-                    $.each(cur.aggChildren, function (i, a) {
+                    $.each(cur.aggChildren, function (x, a) {
                         recurse(a);
                     });
                 } else {
@@ -400,6 +400,10 @@ ng.Aggregate = function (aggEntity, rowFactory) {
             return self.children.length;
         }
     });
+    self.selected = ko.observable(false);
+    self.isEven = ko.observable(false);
+    self.isOdd = ko.observable(false);
+    self.toggleSelected = function () { return true; };
 }; 
 
 /***********************************************
@@ -651,7 +655,9 @@ ng.Column = function (config, grid) {
         return ret;
     };
     self.toggleVisible = function () {
-        self.visible = !self.visible;
+        var v = self.visible();
+        self.visible(!v);
+        ng.domUtilityService.BuildStyles(grid);
     };
     self.showSortButtonUp = ko.computed(function () {
         return self.sortable ? self.sortDirection() === DESC : self.sortable;
@@ -884,7 +890,7 @@ ng.RowFactory = function(grid) {
         self.numberOfAggregates = 0;
         self.groupedData = {};
         // Here we set the onmousedown event handler to the header container.
-        var data = grid.filteredData();
+        var data = grid.filteredData;
         var maxDepth = groups.length;
         var cols = grid.columns();
 
@@ -1303,7 +1309,7 @@ ng.Grid = function (options) {
         return Math.max(0, self.rootDim.outerHeight - self.topPanelHeight() - self.config.footerRowHeight - 2);
     });
     self.groupBy = function(col) {
-        var indx = self.configGroups.indexOf(col);
+        var indx = self.configGroups().indexOf(col);
         if (indx == -1) {
             self.configGroups.push(col);
         } else {

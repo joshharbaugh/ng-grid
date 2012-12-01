@@ -6,7 +6,7 @@ ko.bindingHandlers['ngRow'] = (function () {
     return {
         'init': function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
             var row = valueAccessor();
-            var grid = row.$parent = bindingContext.$parent;
+            var grid = row.$grid = bindingContext.$parent;
             var html;
             if (row.isAggRow) {
                 html = ng.aggregateTemplate();

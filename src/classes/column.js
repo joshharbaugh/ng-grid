@@ -33,7 +33,9 @@
         return ret;
     };
     self.toggleVisible = function () {
-        self.visible = !self.visible;
+        var v = self.visible();
+        self.visible(!v);
+        ng.domUtilityService.BuildStyles(grid);
     };
     self.showSortButtonUp = ko.computed(function () {
         return self.sortable ? self.sortDirection() === DESC : self.sortable;
