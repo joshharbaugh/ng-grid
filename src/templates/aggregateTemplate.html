@@ -1,5 +1,5 @@
 <!--ng.aggregateTemplate-->
-<div data-bind="click: $data.toggleExpand, style: {'left': $data.offsetleft}, attr: {'class': 'ngAggregate ' + aggClass}" class="">
+<div data-bind="click: toggleExpand, style: {'left': offsetleft}, attr: {'class': 'ngAggregate ' + aggClass}">
     <span class="ngAggregateText" data-bind="html: $data.label">(<span data-bind="html: totalChildren"></span> Items)</span>
-    <div data-bind=""></div>
+    <div data-bind="attr: {'class' : aggClass }"></div>
 </div>

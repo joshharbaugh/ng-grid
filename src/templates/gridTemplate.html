@@ -2,14 +2,14 @@
 <div data-bind="css: {'ui-widget': jqueryUITheme}">
     <div class="ngTopPanel" data-bind="css: {'ui-widget-header':jqueryUITheme, 'ui-corner-top': jqueryUITheme}, style: $data.topPanelStyle">
         <div class="ngGroupPanel" data-bind="visible: showGroupPanel, style: headerStyle()">
-            <div class="ngGroupPanelDescription" data-bind="visible: configGroups.length == 0">Drag a column header here and drop it to group by that column</div>
-            <ul data-bind="visible: configGroups.length > 0" class="ngGroupList">
+            <div class="ngGroupPanelDescription" data-bind="visible: configGroups().length == 0">Drag a column header here and drop it to group by that column</div>
+            <ul data-bind="visible: configGroups().length > 0" class="ngGroupList">
                 <li class="ngGroupItem" data-bind="foreach: configGroups">
                     <span class="ngGroupElement">
                         <span class="ngGroupName" data-bind="text: displayName">
                             <span data-bind="click: removeGroup" class="ngRemoveGroup">x</span>
                         </span>
-                        <span data-bind="visible: $index() > $parent.configGroups.length" class="ngGroupArrow"></span>
+                        <span data-bind="visible: $index() < $root.configGroups().length" class="ngGroupArrow"></span>
                     </span>
                 </li>
             </ul>
@@ -40,7 +40,7 @@
     </div>
     <div class="ngViewport" data-bind="css: {'ui-widget-content': jqueryUITheme}, style: viewportStyle">
         <div class="ngCanvas" data-bind="style: canvasStyle">
-            <div data-bind="foreach: renderedRows">
+            <div data-bind="foreach: renderedRows" style="position: absolute;">
                 <div data-bind="style: { 'top': offsetTop, 'height': $parent.rowHeight + 'px' }, click: toggleSelected, css: {'selected': selected, 'even': isEven , 'odd': isOdd }, ngRow: $data" class="ngRow"></div>
             </div>
         </div>

@@ -17,34 +17,37 @@ ng.Aggregate = function (aggEntity, rowFactory) {
     self.children = aggEntity.children;
     self.aggChildren = aggEntity.aggChildren;
     self.aggIndex = aggEntity.aggIndex;
-    self.collapsed = true;
+    self.collapsed = ko.observable(true);
     self.isAggRow = true;
     self.offsetleft = aggEntity.gDepth * 25;
     self.aggLabelFilter = aggEntity.aggLabelFilter;
     self.toggleExpand = function() {
-        self.collapsed = self.collapsed ? false : true;
+        var c = self.collapsed();
+        self.collapsed(!c);
         self.notifyChildren();
     };
     self.setExpand = function (state) {
-        self.collapsed = state;
+        self.collapsed(state);
         self.notifyChildren();
     };
     self.notifyChildren = function() {
         $.each(self.aggChildren, function (i, child) {
-            child.entity[NG_HIDDEN] = self.collapsed;
-            if (self.collapsed) {
-                child.setExpand(self.collapsed);
+            child.entity[NG_HIDDEN] = self.collapsed();
+            if (self.collapsed()) {
+                var c = self.collapsed();
+                child.setExpand(c);
             }
         });
         $.each(self.children, function (i, child) {
-            child[NG_HIDDEN] = self.collapsed;
+            child[NG_HIDDEN] = self.collapsed();
         });
         rowFactory.rowCache = [];
         var foundMyself = false;
         $.each(rowFactory.aggCache, function (i, agg) {
             if (foundMyself) {
                 var offset = (30 * self.children.length);
-                agg.offsetTop(self.collapsed ? agg.offsetTop - offset : agg.offsetTop + offset);
+                var c = self.collapsed();
+                agg.offsetTop(c ? agg.offsetTop() - offset : agg.offsetTop() + offset);
             } else {
                 if (i == self.aggIndex) {
                     foundMyself = true;
@@ -54,7 +57,7 @@ ng.Aggregate = function (aggEntity, rowFactory) {
         rowFactory.renderedChange();
     };
     self.aggClass = ko.computed(function() {
-        return self.collapsed ? "ngAggArrowCollapsed" : "ngAggArrowExpanded";
+        return self.collapsed() ? "ngAggArrowCollapsed" : "ngAggArrowExpanded";
     });
     self.totalChildren = ko.computed(function() {
         if (self.aggChildren.length > 0) {

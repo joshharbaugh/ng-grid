@@ -1,4 +1,5 @@
-﻿/// <reference path="../../lib/knockout-2.2.0.js" />
+﻿/// <reference path="domUtilityService.js" />
+/// <reference path="../../lib/knockout-2.2.0.js" />
 /// <reference path="../utils.js" />
 /// <reference path="../namespace.js" />
 /// <reference path="../../lib/angular.js" />
@@ -36,7 +37,7 @@ ng.RowFactory = function(grid) {
             // build the row
             row = new ng.Row(entity, self.rowConfig, self.selectionService);
             row.rowIndex(rowIndex + 1); //not a zero-based rowIndex
-            row.offsetTop(self.rowHeight * rowIndex);
+            row.offsetTop((self.rowHeight * rowIndex).toString() + 'px');
             row.selected(entity[SELECTED_PROP]);
             // finally cache it for the next round
             self.rowCache[rowIndex] = row;
@@ -52,7 +53,7 @@ ng.RowFactory = function(grid) {
             self.aggCache[aggEntity.aggIndex] = agg;
         }
         agg.index = rowIndex + 1; //not a zero-based rowIndex
-        agg.offsetTop(self.rowHeight * rowIndex);
+        agg.offsetTop((self.rowHeight * rowIndex).toString() + 'px');
         return agg;
     };
     self.UpdateViewableRange = function(newRange) {
@@ -142,7 +143,7 @@ ng.RowFactory = function(grid) {
                     agg.parent = self.parentCache[agg.depth - 1];
                     // if we have a parent, set the parent to not be collapsed and append the current agg to its children
                     if (agg.parent) {
-                        agg.parent.collapsed = false;
+                        agg.parent.collapsed(false);
                         agg.parent.aggChildren.push(agg);
                     }
                     // add the aggregate row to the parsed data.
@@ -171,7 +172,7 @@ ng.RowFactory = function(grid) {
             var ptr = self.groupedData;
             $.each(groups, function(depth, group) {
                 if (!cols[depth].isAggCol && depth <= maxDepth) {
-                    cols.splice(item.gDepth, 0, new ng.Column({
+                    grid.columns.splice(item.gDepth, 0, new ng.Column({
                         colDef: {
                             field: '',
                             width: 25,
@@ -183,6 +184,7 @@ ng.RowFactory = function(grid) {
                         index: item.gDepth,
                         headerRowHeight: grid.config.headerRowHeight
                     }));
+                    ng.domUtilityService.BuildStyles(grid);
                 }
                 var col = cols.filter(function(c) { return c.field == group; })[0];
                 var val = ng.utils.evalProperty(item, group).toString();

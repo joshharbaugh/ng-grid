@@ -257,8 +257,9 @@ ng.Grid = function (options) {
             self.rowFactory.filteredDataChanged();
         });
         self.columns.subscribe(function () {
+            self.fixColumnIndexes();
             ng.domUtilityService.BuildStyles(self);
-        }, true);
+        });
         self.maxCanvasHt(self.calcMaxCanvasHeight());
     };
     self.prevScrollTop = 0;
@@ -323,6 +324,7 @@ ng.Grid = function (options) {
         $.each(self.columns(), function (i, col) {
             col.index = i;
         });
+        ng.domUtilityService.BuildStyles(self);
     };
     //self vars
     self.elementsNeedMeasuring = true;
@@ -393,7 +395,6 @@ ng.Grid = function (options) {
         self.configGroups.splice(index, 1);
         if (self.configGroups.length == 0) {
             self.fixColumnIndexes();
-            ng.domUtilityService.apply();
         }
     };
     self.totalRowWidth = function () {
