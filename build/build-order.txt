@@ -8,6 +8,12 @@
 ..\src\templates\aggregateTemplate.html
 ..\src\templates\headerRowTemplate.html
 ..\src\templates\headerCellTemplate.html
+..\src\bindingHandlers\ng-grid.js
+..\src\bindingHandlers\ng-row.js
+..\src\bindingHandlers\ng-cell.js
+..\src\bindingHandlers\ng-header-row.js
+..\src\bindingHandlers\ng-header-cell.js
+..\src\bindingHandlers\ng-mouse-events.js
 ..\src\classes\aggregate.js
 ..\src\classes\aggregateProvider.js
 ..\src\classes\column.js
@@ -22,8 +28,3 @@
 ..\src\classes\GridService.js
 ..\src\classes\SortService.js
 ..\src\classes\DomUtilityService.js
-..\src\bindingHandlers\ng-grid.js
-..\src\bindingHandlers\ng-row.js
-..\src\bindingHandlers\ng-cell.js
-..\src\bindingHandlers\ng-header-row.js
-..\src\bindingHandlers\ng-header-cell.js

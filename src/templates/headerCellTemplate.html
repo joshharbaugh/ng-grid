@@ -3,5 +3,5 @@
     <div data-bind="attr: { 'class': 'colt' + $index() + ' ngHeaderText' }, html: displayName"></div>
     <div class="ngSortButtonDown" data-bind="visible: showSortButtonDown"></div>
     <div class="ngSortButtonUp" data-bind="visible: showSortButtonUp"></div>
+    <div data-bind="visible: resizable, click: gripClick, mouseEvents: { mouseDown: gripOnMouseDown }" class="ngHeaderGrip" ></div>
 </div>
-<div data-bind="visible: resizable, click: gripClick, event: { onmousedown: gripOnMouseDown }" class="ngHeaderGrip" ></div>

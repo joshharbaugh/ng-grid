@@ -2,7 +2,7 @@
 * ng-grid JavaScript Library
 * Authors: https://github.com/Crash8308/ng-grid/blob/master/README.md
 * License: MIT (http://www.opensource.org/licenses/mit-license.php)
-* Compiled At: 11/30/2012 20:18:31
+* Compiled At: 11/30/2012 20:35:30
 ***********************************************/
 
 (function(window, undefined){
@@ -195,7 +195,138 @@ ng.defaultHeaderRowTemplate = function(){ return '<div data-bind="foreach: visib
 /***********************************************
 * FILE: ..\src\templates\headerCellTemplate.html
 ***********************************************/
-ng.defaultHeaderCellTemplate = function(){ return '<div data-bind="click: sort, css: { \'ngSorted\': !noSortVisible }, attr: {\'class\': \'ngHeaderSortColumn \' + headerClass()}"><div data-bind="attr: { \'class\': \'colt\' + $index() + \' ngHeaderText\' }, html: displayName"></div><div class="ngSortButtonDown" data-bind="visible: showSortButtonDown"></div><div class="ngSortButtonUp" data-bind="visible: showSortButtonUp"></div></div><div data-bind="visible: resizable, click: gripClick, event: { onmousedown: gripOnMouseDown }" class="ngHeaderGrip" ></div>';};
+ng.defaultHeaderCellTemplate = function(){ return '<div data-bind="click: sort, css: { \'ngSorted\': !noSortVisible }, attr: {\'class\': \'ngHeaderSortColumn \' + headerClass()}"><div data-bind="attr: { \'class\': \'colt\' + $index() + \' ngHeaderText\' }, html: displayName"></div><div class="ngSortButtonDown" data-bind="visible: showSortButtonDown"></div><div class="ngSortButtonUp" data-bind="visible: showSortButtonUp"></div><div data-bind="visible: resizable, click: gripClick, mouseEvents: { mouseDown: gripOnMouseDown }" class="ngHeaderGrip" ></div></div>';};
+
+/***********************************************
+* FILE: ..\src\bindingHandlers\ng-grid.js
+***********************************************/
+ko.bindingHandlers['ngGrid'] = (function () {
+    return {
+        'init': function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+            var options = valueAccessor();
+            var elem = $(element);
+            options.gridDim = new ng.Dimension({ outerHeight: elem.height(), outerWidth: elem.width() });
+            var grid = new ng.Grid(options);
+            var gridElem = $(ng.defaultGridTemplate());
+            ng.gridService.StoreGrid(element, grid);
+            // if it is a string we can watch for data changes. otherwise you won't be able to update the grid data
+            options.data.subscribe(function (a) {
+                if (!a) return;
+                grid.sortedData(a);
+                grid.searchProvider.evalFilter();
+                grid.configureColumnWidths();
+                grid.refreshDomSizes();
+            });
+            //set the right styling on the container
+            elem.addClass("ngGrid")
+                .addClass("ui-widget")
+                .addClass(grid.gridId.toString());
+            //call update on the grid, which will refresh the dome measurements asynchronously
+            elem.append(gridElem);// make sure that if any of these change, we re-fire the calc logic
+            ko.applyBindings(grid, gridElem[0]);
+            //walk the element's graph and the correct properties on the grid
+            ng.domUtilityService.AssignGridContainers(elem, grid);
+            grid.configureColumnWidths();
+            //now use the manager to assign the event handlers
+            ng.gridService.AssignGridEventHandlers(grid);
+            grid.aggregateProvider = new ng.AggregateProvider(grid);
+            //initialize plugins.
+            $.each(grid.config.plugins, function (i, p) {
+                p.init(grid);
+            });
+            return { controlsDescendantBindings: true };
+        }
+    };
+}());
+
+/***********************************************
+* FILE: ..\src\bindingHandlers\ng-row.js
+***********************************************/
+ko.bindingHandlers['ngRow'] = (function () {
+    return {
+        'init': function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+            var row = valueAccessor();
+            var grid = row.$parent = bindingContext.$parent;
+            var html;
+            if (row.isAggRow) {
+                html = ng.aggregateTemplate();
+                if (row.aggLabelFilter) {
+                    html = html.replace(CUSTOM_FILTERS, '| ' + row.aggLabelFilter);
+                } else {
+                    html = html.replace(CUSTOM_FILTERS, "");
+                }
+            } else {
+                html = grid.rowTemplate;
+            }
+            var rowElem = $(html);
+            ko.applyBindings(row, rowElem[0]);
+            $(element).append(rowElem);
+            return { controlsDescendantBindings: true };
+        }
+    };
+}());
+
+/***********************************************
+* FILE: ..\src\bindingHandlers\ng-cell.js
+***********************************************/
+ko.bindingHandlers['ngCell'] = (function () {
+    return {
+        'init': function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+            var col = valueAccessor();
+            col.$parent = bindingContext.$parent;
+            var cell = $(col.cellTemplate);
+            ko.applyBindings(col, cell[0]);
+            $(element).append(cell);
+            return { controlsDescendantBindings: true };
+        }
+    };
+}());
+
+/***********************************************
+* FILE: ..\src\bindingHandlers\ng-header-row.js
+***********************************************/
+ko.bindingHandlers['ngHeaderRow'] = (function () {
+    return {
+        'init': function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+            var grid = valueAccessor();
+            var headerRow = $(grid.headerRowTemplate);
+            ko.applyBindings(grid, headerRow[0]);
+            $(element).append(headerRow);
+            return { controlsDescendantBindings: true };
+        }
+    };
+}());
+
+/***********************************************
+* FILE: ..\src\bindingHandlers\ng-header-cell.js
+***********************************************/
+ko.bindingHandlers['ngHeaderCell'] = (function () {
+    return {
+        'init': function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+            var col = valueAccessor();
+            col.$index = bindingContext.$index;
+            col.$grid = bindingContext.$parent;
+            var headerCell = $(col.headerCellTemplate);
+            ko.applyBindings(col, headerCell[0]);
+            $(element).append(headerCell);
+            return { controlsDescendantBindings: true };
+        }
+    };
+}());
+
+/***********************************************
+* FILE: ..\src\bindingHandlers\ng-mouse-events.js
+***********************************************/
+ko.bindingHandlers['mouseEvents'] = (function () {
+    return {
+        'init': function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+            var eFuncs = valueAccessor();
+            if (eFuncs.mouseDown) {
+                $(element).mousedown(eFuncs.mouseDown);
+            }
+        },
+    };
+}());
 
 /***********************************************
 * FILE: ..\src\classes\aggregate.js
@@ -1814,121 +1945,4 @@ ng.domUtilityService = {
     LetterW: 10
 };
 getWidths();
-
-/***********************************************
-* FILE: ..\src\bindingHandlers\ng-grid.js
-***********************************************/
-ko.bindingHandlers['ngGrid'] = (function () {
-    return {
-        'init': function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-            var options = valueAccessor();
-            var elem = $(element);
-            options.gridDim = new ng.Dimension({ outerHeight: elem.height(), outerWidth: elem.width() });
-            var grid = new ng.Grid(options);
-            var gridElem = $(ng.defaultGridTemplate());
-            ng.gridService.StoreGrid(element, grid);
-            // if it is a string we can watch for data changes. otherwise you won't be able to update the grid data
-            options.data.subscribe(function (a) {
-                if (!a) return;
-                grid.sortedData(a);
-                grid.searchProvider.evalFilter();
-                grid.configureColumnWidths();
-                grid.refreshDomSizes();
-            });
-            //set the right styling on the container
-            elem.addClass("ngGrid")
-                .addClass("ui-widget")
-                .addClass(grid.gridId.toString());
-            //call update on the grid, which will refresh the dome measurements asynchronously
-            elem.append(gridElem);// make sure that if any of these change, we re-fire the calc logic
-            ko.applyBindings(grid, gridElem[0]);
-            //walk the element's graph and the correct properties on the grid
-            ng.domUtilityService.AssignGridContainers(elem, grid);
-            grid.configureColumnWidths();
-            //now use the manager to assign the event handlers
-            ng.gridService.AssignGridEventHandlers(grid);
-            grid.aggregateProvider = new ng.AggregateProvider(grid);
-            //initialize plugins.
-            $.each(grid.config.plugins, function (i, p) {
-                p.init(grid);
-            });
-            return { controlsDescendantBindings: true };
-        }
-    };
-}());
-
-/***********************************************
-* FILE: ..\src\bindingHandlers\ng-row.js
-***********************************************/
-ko.bindingHandlers['ngRow'] = (function () {
-    return {
-        'init': function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-            var row = valueAccessor();
-            var grid = row.$parent = bindingContext.$parent;
-            var html;
-            if (row.isAggRow) {
-                html = ng.aggregateTemplate();
-                if (row.aggLabelFilter) {
-                    html = html.replace(CUSTOM_FILTERS, '| ' + row.aggLabelFilter);
-                } else {
-                    html = html.replace(CUSTOM_FILTERS, "");
-                }
-            } else {
-                html = grid.rowTemplate;
-            }
-            var rowElem = $(html);
-            ko.applyBindings(row, rowElem[0]);
-            $(element).append(rowElem);
-            return { controlsDescendantBindings: true };
-        }
-    };
-}());
-
-/***********************************************
-* FILE: ..\src\bindingHandlers\ng-cell.js
-***********************************************/
-ko.bindingHandlers['ngCell'] = (function () {
-    return {
-        'init': function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-            var col = valueAccessor();
-            col.$parent = bindingContext.$parent;
-            var cell = $(col.cellTemplate);
-            ko.applyBindings(col, cell[0]);
-            $(element).append(cell);
-            return { controlsDescendantBindings: true };
-        }
-    };
-}());
-
-/***********************************************
-* FILE: ..\src\bindingHandlers\ng-header-row.js
-***********************************************/
-ko.bindingHandlers['ngHeaderRow'] = (function () {
-    return {
-        'init': function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-            var grid = valueAccessor();
-            var headerRow = $(grid.headerRowTemplate);
-            ko.applyBindings(grid, headerRow[0]);
-            $(element).append(headerRow);
-            return { controlsDescendantBindings: true };
-        }
-    };
-}());
-
-/***********************************************
-* FILE: ..\src\bindingHandlers\ng-header-cell.js
-***********************************************/
-ko.bindingHandlers['ngHeaderCell'] = (function () {
-    return {
-        'init': function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-            var col = valueAccessor();
-            col.$index = bindingContext.$index;
-            col.$grid = bindingContext.$parent;
-            var headerCell = $(col.headerCellTemplate);
-            ko.applyBindings(col, headerCell[0]);
-            $(element).append(headerCell);
-            return { controlsDescendantBindings: true };
-        }
-    };
-}());
 }(window));
