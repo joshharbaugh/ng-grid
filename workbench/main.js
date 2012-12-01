@@ -49,9 +49,9 @@ function mainViewModel() {
         showColumnMenu: true,
         showFilter: false,
         maintainColumnRatios: false,
-        columnDefs: [{ field: 'name', displayName: 'Very Long Name Title', sortable: false, headerClass: 'foo' },
+        columnDefs: [{ field: 'name', displayName: 'Very Long Name Title', headerClass: 'foo' },
                      { field: 'allowance',  aggLabelFilter: 'currency'},
-                     { field: 'birthday', cellFilter: 'date', resizable: false },
+                     { field: 'birthday', cellFilter: 'date'},
                      { field: 'paid',  cellFilter: 'checkmark' }]
     };
 }

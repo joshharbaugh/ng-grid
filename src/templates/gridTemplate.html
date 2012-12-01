@@ -49,7 +49,7 @@
                 <span class="ngLabel">Total Items: <span data-bind="text: maxRowsDisplay"></span></span><span data-bind="visible: filterText.length > 0" class="ngLabel">(Showing: <span data-bind="text: totalFilteredItemsLength"></span>)</span>
             </div>
             <div class="ngFooterSelectedItems" data-bind="visible: multiSelect">
-                <span class="ngLabel">Selected Items: <span data-bind="text: selectedItemCount"></span>{{}}</span>
+                <span class="ngLabel">Selected Items: <span data-bind="text: selectedItemCount"></span></span>
             </div>
         </div>
         <div class="ngPagerContainer" style="float: right; margin-top: 10px;" data-bind="visible: (footerVisible && enablePaging), css: {'ngNoMultiSelect': !multiSelect}">

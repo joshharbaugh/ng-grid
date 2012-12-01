@@ -17,7 +17,7 @@ ng.Row = function (entity, config, selectionService) {
         self.entity[SELECTED_PROP] = false;
     }
     self.selected = ko.observable(false);
-    self.toggleSelected = function (event) {
+    self.toggleSelected = function (row, event) {
         if (!canSelectRows) {
             return true;
         }
@@ -36,15 +36,15 @@ ng.Row = function (entity, config, selectionService) {
         }
         return false;
     };
-    self.rowIndex = 0;
+    self.rowIndex = ko.observable(0);
     self.offsetTop = ko.observable(0);
     self.rowDisplayIndex = 0;
     self.isEven = ko.computed(function () {
-        if (self.rowIndex % 2 == 0) return true;
+        if (self.rowIndex() % 2 == 0) return true;
         return false;
     });
     self.isOdd = ko.computed(function () {
-        if (self.rowIndex % 2 != 0) return true;
+        if (self.rowIndex() % 2 != 0) return true;
         return false;
     });
     self.beforeSelectionChange = config.beforeSelectionChangeCallback;

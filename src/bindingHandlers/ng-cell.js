@@ -7,6 +7,7 @@ ko.bindingHandlers['ngCell'] = (function () {
             var cell = $(col.cellTemplate);
             ko.applyBindings(col, cell[0]);
             $(element).append(cell);
+            return { controlsDescendantBindings: true };
         }
     };
 }());

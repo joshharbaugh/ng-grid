@@ -57,10 +57,11 @@ ng.utils = {
         }
     },
     evalProperty: function (entity, path) {
+        var e = ko.utils.unwrapObservable(entity);
         var propPath = path.split('.'), i = 0;
-        var tempProp = entity[propPath[i++]], links = propPath.length;
+        var tempProp = ko.utils.unwrapObservable(e[propPath[i++]]), links = propPath.length;
         while (tempProp && i < links) {
-            tempProp = tempProp[propPath[i++]];
+            tempProp = ko.utils.unwrapObservable(tempProp[propPath[i++]]);
         }
         return tempProp;
     },

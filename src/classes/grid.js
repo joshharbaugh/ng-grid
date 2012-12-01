@@ -50,13 +50,13 @@ ng.Grid = function (options) {
             pagingOptions: {
                 pageSizes: ko.observableArray([250, 500, 1000]), //page Sizes
                 pageSize: ko.observable(250), //Size of Paging data
-                totalServerItems: ko.observable(undefined), //how many items are on the server (for paging)
+                totalServerItems: ko.observable(0), //how many items are on the server (for paging)
                 currentPage: ko.observable(1), //what page they are currently on
             },
         },
         self = this;
     
-    self.maxCanvasHt = 0;
+    self.maxCanvasHt = ko.observable(0);
     //self vars
     self.config = $.extend(defaults, options);
     self.gridId = "ng" + ng.utils.newId();
@@ -109,18 +109,19 @@ ng.Grid = function (options) {
         dim.outerWidth = self.elementDims.rootMaxW;
         dim.outerHeight = self.elementDims.rootMaxH;
         self.rootDim = dim;		
-        self.maxCanvasHt = self.calcMaxCanvasHeight();
+        self.maxCanvasHt(self.calcMaxCanvasHeight());
     };
     self.buildColumnDefsFromData = function () {
+        var sd = self.sortedData();
         if (!self.config.columnDefs > 0) {
             self.config.columnDefs = [];
         }
-        if (!self.sortedData || !self.sortedData[0]) {
+        if (!sd || !sd[0]) {
             self.lateBoundColumns = true;
             return;
         }
         var item;
-        item = self.sortedData[0];
+        item = sd[0];
 
         ng.utils.forIn(item, function (prop, propName) {
             self.config.columnDefs.push({
@@ -142,8 +143,8 @@ ng.Grid = function (options) {
                 width: self.elementDims.rowSelectedCellW,
                 sortable: false,
                 resizable: false,
-                headerCellTemplate: '<input class="ngSelectionHeader" type="checkbox" ng-show="multiSelect" ng-model="allSelected" ng-change="toggleSelectAll(allSelected)"/>',
-                cellTemplate: '<div class="ngSelectionCell"><input class="ngSelectionCheckbox" type="checkbox" ng-checked="row.selected" /></div>'
+                headerCellTemplate: '<input class="ngSelectionHeader" type="checkbox" data-bind="visible: $grid.multiSelect, checked: $grid.allSelected, click: $grid.toggleSelectAll"/>',
+                cellTemplate: '<div class="ngSelectionCell"><input class="ngSelectionCheckbox" type="checkbox" data-bind="checked: $parent.selected" /></div>'
             });
         }
         if (columnDefs.length > 0) {
@@ -223,7 +224,7 @@ ng.Grid = function (options) {
             $.each(asterisksArray, function (i, col) {
                 var t = col.width.length;
                 columns[col.index].width = asteriskVal * t;
-                if (col.index + 1 == numOfCols && self.maxCanvasHt > self.viewportDimHeight()) columns[col.index].width -= (ng.domUtilityService.ScrollW + 2);
+                if (col.index + 1 == numOfCols && self.maxCanvasHt() > self.viewportDimHeight()) columns[col.index].width -= (ng.domUtilityService.ScrollW + 2);
                 totalWidth += columns[col.index].width;
             });
         }
@@ -258,7 +259,7 @@ ng.Grid = function (options) {
         self.columns.subscribe(function () {
             ng.domUtilityService.BuildStyles(self);
         }, true);
-        self.maxCanvasHt = self.calcMaxCanvasHeight();
+        self.maxCanvasHt(self.calcMaxCanvasHeight());
     };
     self.prevScrollTop = 0;
     self.prevScrollIndex = 0;
@@ -311,10 +312,10 @@ ng.Grid = function (options) {
     self.clearSortingData = function (col) {
         if (!col) {
             $.each(self.columns(), function (i, c) {
-                c.sortDirection = "";
+                c.sortDirection("");
             });
         } else if (self.lastSortedColumn && col != self.lastSortedColumn) {
-            self.lastSortedColumn.sortDirection = "";
+            self.lastSortedColumn.sortDirection("");
         }
     };
     self.fixColumnIndexes = function() {
@@ -360,8 +361,11 @@ ng.Grid = function (options) {
     self.toggleShowMenu = function () {
         self.showMenu(!self.showMenu());
     };
-    self.toggleSelectAll = function (a) {
-        self.selectionService.toggleSelectAll(a);
+    self.allSelected = ko.observable(false);
+    self.toggleSelectAll = function () {
+        var s = self.allSelected();
+        self.allSelected(!s);
+        self.selectionService.toggleSelectAll(self.allSelected());
     };
     self.totalFilteredItemsLength = ko.computed(function () {
         return Math.max(self.filteredData.length);
@@ -402,7 +406,7 @@ ng.Grid = function (options) {
     };
     self.headerScrollerDim = function () {
         var viewportH = self.viewportDimHeight(),
-            maxHeight = self.maxCanvasHt,
+            maxHeight = self.maxCanvasHt(),
             vScrollBarIsOpen = (maxHeight > viewportH),
             newDim = new ng.Dimension();
 
@@ -416,17 +420,17 @@ ng.Grid = function (options) {
     };
     //footer
     self.jqueryUITheme = self.config.jqueryUITheme;
-    self.maxRows = Math.max(self.config.pagingOptions.totalServerItems || self.sortedData.length, 1);
+    self.maxRows = ko.observable(Math.max(self.config.pagingOptions.totalServerItems() || self.sortedData().length, 1));
     self.maxRowsDisplay = ko.computed(function () {
-        return self.maxRows;
+        return self.maxRows();
     });
     self.multiSelect = ko.observable((self.config.canSelectRows && self.config.multiSelect));
     self.selectedItemCount = ko.computed(function () {
-        return self.selectedItemCount;
+        return self.selectedItems().length;
     });
     self.maxPages = ko.computed(function () {
-        self.maxRows = Math.max(self.config.pagingOptions.totalServerItems || self.sortedData.length, 1);
-        return Math.ceil(self.maxRows / self.pagingOptions.pageSize());
+        self.maxRows(Math.max(self.config.pagingOptions.totalServerItems() || self.sortedData().length, 1));
+        return Math.ceil(self.maxRows() / self.pagingOptions.pageSize());
     });
     self.pageForward = function () {
         var page = self.config.pagingOptions.currentPage();

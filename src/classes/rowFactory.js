@@ -35,7 +35,7 @@ ng.RowFactory = function(grid) {
         if (!row) {
             // build the row
             row = new ng.Row(entity, self.rowConfig, self.selectionService);
-            row.rowIndex = rowIndex + 1; //not a zero-based rowIndex
+            row.rowIndex(rowIndex + 1); //not a zero-based rowIndex
             row.offsetTop(self.rowHeight * rowIndex);
             row.selected(entity[SELECTED_PROP]);
             // finally cache it for the next round

@@ -193,8 +193,9 @@ ng.AggregateProvider = function (grid, gridService) {
             var prevRow = gridService.eventStorage.rowToMove;
             if (prevRow.scope.row == rowScope.row) return;
             // Splice the Rows via the actual datasource
-            var i = grid.sortedData.indexOf(prevRow.scope.row.entity);
-            var j = grid.sortedData.indexOf(rowScope.row.entity);
+            var sd = grid.sortedData();
+            var i = sd.indexOf(prevRow.scope.row.entity);
+            var j = sd.indexOf(rowScope.row.entity);
             grid.sortedData.splice(i, 1);
             grid.sortedData.splice(j, 0, prevRow.scope.row.entity);
             grid.searchProvider.evalFilter();

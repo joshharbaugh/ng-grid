@@ -9,7 +9,7 @@
     self.evalFilter = function() {
         var ft = self.filterText().toLowerCase();
         var v = self.value;
-        grid.filteredData = grid.sortedData.filter(function(item) {
+        grid.filteredData = grid.sortedData().filter(function(item) {
             if (!self.filterText) {
                 return true;
             } else if (!self.field) {

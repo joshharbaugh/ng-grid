@@ -134,9 +134,10 @@ ng.sortService = {
         if (dateA < dateB) return -1;
         return 1;
     },
-    sortData: function(data /*datasource*/, sortInfo) {
+    sortData: function (data /*datasource*/, sortInfo) {
+        var unwrappedData = data();
         // first make sure we are even supposed to do work
-        if (!data || !sortInfo) {
+        if (!unwrappedData || !sortInfo) {
             return;
         }
         // grab the metadata for the rest of the logic
@@ -144,7 +145,6 @@ ng.sortService = {
             direction = sortInfo.direction,
             sortFn,
             item;
-
         //see if we already figured out what to use to sort the column
         if (ng.sortService.colSortFnCache[col.field]) {
             sortFn = ng.sortService.colSortFnCache[col.field];
@@ -152,7 +152,7 @@ ng.sortService = {
             sortFn = col.sortingAlgorithm;
             ng.sortService.colSortFnCache[col.field] = col.sortingAlgorithm;
         } else { // try and guess what sort function to use
-            item = data[0];
+            item = unwrappedData[0];
             sortFn = ng.sortService.guessSortFn(item[col.field]);
             //cache it
             if (sortFn) {
@@ -165,7 +165,7 @@ ng.sortService = {
             }
         }
         //now actually sort the data
-        data.sort(function(itemA, itemB) {
+        unwrappedData.sort(function (itemA, itemB) {
             var propA = ng.utils.evalProperty(itemA, col.field);
             var propB = ng.utils.evalProperty(itemB, col.field);
             // we want to force nulls and such to the bottom when we sort... which effectively is "greater than"
@@ -183,6 +183,7 @@ ng.sortService = {
                 return 0 - sortFn(propA, propB);
             }
         });
+        data(unwrappedData);
         return;
     },
     Sort: function (sortInfo, data) {

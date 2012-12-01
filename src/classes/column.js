@@ -18,7 +18,7 @@
     self.visible = ko.observable(ng.utils.isNullOrUndefined(colDef.visible) || colDef.visible);
     self.sortable = ko.observable(ng.utils.isNullOrUndefined(colDef.sortable) || colDef.sortable);
     self.resizable = ko.observable(ng.utils.isNullOrUndefined(colDef.resizable) || colDef.resizable);
-    self.sortDirection = undefined;
+    self.sortDirection = ko.observable(undefined);
     self.sortingAlgorithm = colDef.sortFn;
     self.headerClass = ko.observable(colDef.headerClass);
     self.headerCellTemplate = colDef.headerCellTemplate || ng.defaultHeaderCellTemplate();
@@ -36,21 +36,22 @@
         self.visible = !self.visible;
     };
     self.showSortButtonUp = ko.computed(function () {
-        return self.sortable ? self.sortDirection === DESC : self.sortable;
+        return self.sortable ? self.sortDirection() === DESC : self.sortable;
     });
     self.showSortButtonDown = ko.computed(function () {
-        return self.sortable ? self.sortDirection === ASC : self.sortable;
+        return self.sortable ? self.sortDirection() === ASC : self.sortable;
     });     
     self.noSortVisible = ko.computed(function () {
-        return !self.sortDirection;
+        return !self.sortDirection();
     });
     self.sort = function () {
-        if (!self.sortable) {
-            return; // column sorting is disabled, do nothing
+        if (!self.sortable()) {
+            return true; // column sorting is disabled, do nothing
         }
-        var dir = self.sortDirection === ASC ? DESC : ASC;
-        self.sortDirection = dir;
+        var dir = self.sortDirection() === ASC ? DESC : ASC;
+        self.sortDirection(dir);
         config.sortCallback(self, dir);
+        return false;
     };   
     self.gripClick = function () {
         clicks++;  //count clicks

@@ -3,7 +3,7 @@
         return { "height": grid.topPanelHeight() + "px" };
     });
     grid.canvasStyle = ko.computed(function() {
-        return { "height": grid.maxCanvasHt.toString() + "px" };
+        return { "height": grid.maxCanvasHt().toString() + "px" };
     });
     grid.headerScrollerStyle = ko.computed(function() {
         return { "height": grid.config.headerRowHeight + "px" };

@@ -38,7 +38,7 @@ ng.SelectionService = function (grid) {
 	    if (grid.config.keepLastSelected && !self.multi) {
 	        self.setSelection(rowItem, true);
 	    } else {
-	        self.setSelection(rowItem, rowItem.selected ? false : true);
+	        self.setSelection(rowItem, rowItem.selected() ? false : true);
 	    }
 	    
 	    self.lastClickedRow = rowItem;
@@ -47,7 +47,7 @@ ng.SelectionService = function (grid) {
 
     // just call this func and hand it the rowItem you want to select (or de-select)    
     self.setSelection = function(rowItem, isSelected) {
-        rowItem.selected = isSelected ;
+        rowItem.selected(isSelected) ;
         rowItem.entity[SELECTED_PROP] = isSelected;
         if (!isSelected) {
             var indx = self.selectedItems.indexOf(rowItem.entity);
@@ -73,7 +73,7 @@ ng.SelectionService = function (grid) {
             }
         });
         $.each(self.rowFactory.rowCache, function (i, row) {
-            row.selected = checkAll;
+            row.selected(checkAll);
         });
     };
 };
