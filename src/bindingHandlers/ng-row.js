@@ -21,6 +21,7 @@ ko.bindingHandlers['ngRow'] = (function () {
             var rowElem = $(html);
             ko.applyBindings(row, rowElem[0]);
             $(element).append(rowElem);
+            return { controlsDescendantBindings: true };
         }
     };
 }());

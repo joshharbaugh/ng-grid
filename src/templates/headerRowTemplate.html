@@ -1,4 +1,4 @@
 <!--ng.defaultHeaderRowTemplate-->
 <div data-bind="foreach: visibleColumns">
-    <div data-bind="ngHeaderCell: $data, attr: { 'class': 'ngHeaderCell col' + $index }"></div>
+    <div data-bind="ngHeaderCell: $data, attr: { 'class': 'ngHeaderCell col' + $index() }"></div>
 </div>

@@ -2,7 +2,7 @@
 * ng-grid JavaScript Library
 * Authors: https://github.com/Crash8308/ng-grid/blob/master/README.md
 * License: MIT (http://www.opensource.org/licenses/mit-license.php)
-* Compiled At: 11/30/2012 15:34:04
+* Compiled At: 11/30/2012 18:39:08
 ***********************************************/
 
 (function(window, undefined){
@@ -174,7 +174,7 @@ ng.defaultGridTemplate = function(){ return '<div data-bind="css: {\'ui-widget\'
 /***********************************************
 * FILE: ..\src\templates\rowTemplate.html
 ***********************************************/
-ng.defaultRowTemplate = function(){ return '<div data-bind="foreach: $parent.visibleColumns, css: { \'ui-widget-content\': $parent.jqueryUITheme }"><div data-bind="attr: { \'class\': \'ngCell col\' + $index + \' \' + $data.cellClass }, ngCell: $data"></div></div>';};
+ng.defaultRowTemplate = function(){ return '<div data-bind="foreach: $parent.visibleColumns, css: { \'ui-widget-content\': $parent.jqueryUITheme }"><div data-bind="attr: { \'class\': \'ngCell col\' + $index() + \' \' + $data.cellClass }, ngCell: $data"></div></div>';};
 
 /***********************************************
 * FILE: ..\src\templates\cellTemplate.html
@@ -189,12 +189,12 @@ ng.aggregateTemplate = function(){ return '<div data-bind="click: $data.toggleEx
 /***********************************************
 * FILE: ..\src\templates\headerRowTemplate.html
 ***********************************************/
-ng.defaultHeaderRowTemplate = function(){ return '<div data-bind="foreach: visibleColumns"><div data-bind="ngHeaderCell: $data, attr: { \'class\': \'ngHeaderCell col\' + $index }"></div></div>';};
+ng.defaultHeaderRowTemplate = function(){ return '<div data-bind="foreach: visibleColumns"><div data-bind="ngHeaderCell: $data, attr: { \'class\': \'ngHeaderCell col\' + $index() }"></div></div>';};
 
 /***********************************************
 * FILE: ..\src\templates\headerCellTemplate.html
 ***********************************************/
-ng.defaultHeaderCellTemplate = function(){ return '<div data-bind="click: sort, css: { \'ngSorted\': !noSortVisible }, attr: {\'class\': \'ngHeaderSortColumn \' + headerClass}" class=""><div data-bind="attr: { \'class\': \'colt\' + $index + \' ngHeaderText\' }, html: $data.displayName"></div><div class="ngSortButtonDown" data-bind="visible: $data.showSortButtonDown"></div><div class="ngSortButtonUp" data-bind="visible: $data.showSortButtonUp"></div></div><div data-bind="visible: resizable, click: $data.gripClick, event: { onmousedown: gripOnMouseDown }" class="ngHeaderGrip" ></div>';};
+ng.defaultHeaderCellTemplate = function(){ return '<div data-bind="click: sort, css: { \'ngSorted\': !noSortVisible }, attr: {\'class\': \'ngHeaderSortColumn \' + headerClass}" class=""><div data-bind="attr: { \'class\': \'colt\' + $index() + \' ngHeaderText\' }, html: $data.displayName"></div><div class="ngSortButtonDown" data-bind="visible: $data.showSortButtonDown"></div><div class="ngSortButtonUp" data-bind="visible: $data.showSortButtonUp"></div></div><div data-bind="visible: resizable, click: $data.gripClick, event: { onmousedown: gripOnMouseDown }" class="ngHeaderGrip" ></div>';};
 
 /***********************************************
 * FILE: ..\src\classes\aggregate.js
@@ -1871,6 +1871,7 @@ ko.bindingHandlers['ngRow'] = (function () {
             var rowElem = $(html);
             ko.applyBindings(row, rowElem[0]);
             $(element).append(rowElem);
+            return { controlsDescendantBindings: true };
         }
     };
 }());
@@ -1900,6 +1901,7 @@ ko.bindingHandlers['ngHeaderRow'] = (function () {
             var headerRow = $(grid.headerRowTemplate);
             ko.applyBindings(grid, headerRow[0]);
             $(element).append(headerRow);
+            return { controlsDescendantBindings: true };
         }
     };
 }());
