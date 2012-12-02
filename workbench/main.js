@@ -25,8 +25,8 @@ function mainViewModel() {
             } else {
                 data = largeLoad();
             }
-            var pagedData = data.slice((page - 1) * pageSize, page * pageSize);
-            self.myData(pagedData);
+            //var pagedData = data.slice((page - 1) * pageSize, page * pageSize);
+            self.myData(data);
             self.pagingOptions.totalServerItems(data.length);
         }, 100);
     };

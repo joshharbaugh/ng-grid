@@ -15,7 +15,15 @@
     self.cellFilter = colDef.cellFilter;
     self.field = colDef.field;
     self.aggLabelFilter = colDef.cellFilter || colDef.aggLabelFilter;
-    self.visible = ko.observable(ng.utils.isNullOrUndefined(colDef.visible) || colDef.visible);
+    self._visible = ko.observable(ng.utils.isNullOrUndefined(colDef.visible) || colDef.visible);
+    self.visible = ko.computed({
+        read: function() {
+            return self._visible();
+        },
+        write: function(val) {
+            self.toggleVisible(val);
+        }
+    });
     self.sortable = ko.observable(ng.utils.isNullOrUndefined(colDef.sortable) || colDef.sortable);
     self.resizable = ko.observable(ng.utils.isNullOrUndefined(colDef.resizable) || colDef.resizable);
     self.sortDirection = ko.observable(undefined);
@@ -32,11 +40,17 @@
         }
         return ret;
     };
-    self.toggleVisible = function () {
-        var v = self.visible();
-        self.visible(!v);
+    self.toggleVisible = function (val) {
+        var v;
+        if (ng.utils.isNullOrUndefined(val) || typeof val == "object") {
+            v = !self._visible();
+        } else {
+            v = val;
+        }
+        self._visible(v);
         ng.domUtilityService.BuildStyles(grid);
     };
+
     self.showSortButtonUp = ko.computed(function () {
         return self.sortable ? self.sortDirection() === DESC : self.sortable;
     });

@@ -2,7 +2,7 @@
 * ng-grid JavaScript Library
 * Authors: https://github.com/Crash8308/ng-grid/blob/master/README.md
 * License: MIT (http://www.opensource.org/licenses/mit-license.php)
-* Compiled At: 12/01/2012 13:20:19
+* Compiled At: 12/01/2012 16:10:14
 ***********************************************/
 
 (function(window, undefined){
@@ -272,7 +272,7 @@ ko.bindingHandlers['ngRow'] = (function () {
 ko.bindingHandlers['ngCell'] = (function () {
     return {
         'init': function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-            var col = valueAccessor();
+            var col = viewModel;
             col.$parent = bindingContext.$parent;
             var cell = $(col.cellTemplate);
             ko.applyBindings(col, cell[0]);
@@ -288,9 +288,8 @@ ko.bindingHandlers['ngCell'] = (function () {
 ko.bindingHandlers['ngHeaderRow'] = (function () {
     return {
         'init': function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-            var grid = valueAccessor();
-            var headerRow = $(grid.headerRowTemplate);
-            ko.applyBindings(grid, headerRow[0]);
+            var headerRow = $(viewModel.headerRowTemplate);
+            ko.applyBindings(viewModel, headerRow[0]);
             $(element).append(headerRow);
             return { controlsDescendantBindings: true };
         }
@@ -303,7 +302,7 @@ ko.bindingHandlers['ngHeaderRow'] = (function () {
 ko.bindingHandlers['ngHeaderCell'] = (function () {
     return {
         'init': function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-            var col = valueAccessor();
+            var col = viewModel;
             col.$index = bindingContext.$index;
             col.$grid = bindingContext.$parent;
             var headerCell = $(col.headerCellTemplate);
@@ -640,7 +639,15 @@ ng.Column = function (config, grid) {
     self.cellFilter = colDef.cellFilter;
     self.field = colDef.field;
     self.aggLabelFilter = colDef.cellFilter || colDef.aggLabelFilter;
-    self.visible = ko.observable(ng.utils.isNullOrUndefined(colDef.visible) || colDef.visible);
+    self._visible = ko.observable(ng.utils.isNullOrUndefined(colDef.visible) || colDef.visible);
+    self.visible = ko.computed({
+        read: function() {
+            return self._visible();
+        },
+        write: function(val) {
+            self.toggleVisible(val);
+        }
+    });
     self.sortable = ko.observable(ng.utils.isNullOrUndefined(colDef.sortable) || colDef.sortable);
     self.resizable = ko.observable(ng.utils.isNullOrUndefined(colDef.resizable) || colDef.resizable);
     self.sortDirection = ko.observable(undefined);
@@ -657,11 +664,17 @@ ng.Column = function (config, grid) {
         }
         return ret;
     };
-    self.toggleVisible = function () {
-        var v = self.visible();
-        self.visible(!v);
+    self.toggleVisible = function (val) {
+        var v;
+        if (ng.utils.isNullOrUndefined(val) || typeof val == "object") {
+            v = !self._visible();
+        } else {
+            v = val;
+        }
+        self._visible(v);
         ng.domUtilityService.BuildStyles(grid);
     };
+
     self.showSortButtonUp = ko.computed(function () {
         return self.sortable ? self.sortDirection() === DESC : self.sortable;
     });
@@ -1257,7 +1270,6 @@ ng.Grid = function (options) {
         $.each(self.columns(), function (i, col) {
             col.index = i;
         });
-        ng.domUtilityService.BuildStyles(self);
     };
     //self vars
     self.elementsNeedMeasuring = true;

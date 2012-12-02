@@ -324,7 +324,6 @@ ng.Grid = function (options) {
         $.each(self.columns(), function (i, col) {
             col.index = i;
         });
-        ng.domUtilityService.BuildStyles(self);
     };
     //self vars
     self.elementsNeedMeasuring = true;

@@ -1,7 +1,7 @@
 ﻿ko.bindingHandlers['ngHeaderCell'] = (function () {
     return {
         'init': function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-            var col = valueAccessor();
+            var col = viewModel;
             col.$index = bindingContext.$index;
             col.$grid = bindingContext.$parent;
             var headerCell = $(col.headerCellTemplate);
