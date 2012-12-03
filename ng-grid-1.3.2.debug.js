@@ -2,7 +2,7 @@
 * ng-grid JavaScript Library
 * Authors: https://github.com/Crash8308/ng-grid/blob/master/README.md
 * License: MIT (http://www.opensource.org/licenses/mit-license.php)
-* Compiled At: 12/02/2012 16:36:52
+* Compiled At: 12/02/2012 17:33:16
 ***********************************************/
 
 (function(window, undefined){
@@ -202,7 +202,7 @@ ng.defaultHeaderCellTemplate = function(){ return '<div data-bind="click: sort, 
 ***********************************************/
 ko.bindingHandlers['ngGrid'] = (function () {
     return {
-        'init': function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+        'init': function (element, valueAccessor) {
             var options = valueAccessor();
             var elem = $(element);
             options.gridDim = new ng.Dimension({ outerHeight: elem.height(), outerWidth: elem.width() });
@@ -217,6 +217,16 @@ ko.bindingHandlers['ngGrid'] = (function () {
                 grid.configureColumnWidths();
                 grid.refreshDomSizes();
             });
+            // if columndefs are observable watch for changes and rebuild columns.
+            if (ko.isObservable(options.columnDefs)) {
+                options.columnDefs.subscribe(function (newDefs) {
+                    grid.columns([]);
+                    grid.config.columnDefs = newDefs;
+                    grid.buildColumns();
+                    grid.configureColumnWidths();
+                    ng.domUtilityService.BuildStyles(grid);
+                });
+            }
             //set the right styling on the container
             elem.addClass("ngGrid")
                 .addClass("ui-widget")
@@ -407,7 +417,7 @@ ng.Aggregate = function (aggEntity, rowFactory) {
 /***********************************************
 * FILE: ..\src\classes\aggregateProvider.js
 ***********************************************/
-ng.AggregateProvider = function (grid, gridService) {
+ng.AggregateProvider = function (grid) {
     var self = this;
     // The init method gets called during the ng-grid directive execution.
     self.colToMove = undefined;
@@ -586,7 +596,7 @@ ng.AggregateProvider = function (grid, gridService) {
             // set draggable events
             targetRow.attr('draggable', 'true');
             // Save the row for later.
-            gridService.eventStorage.rowToMove = { targetRow: targetRow, scope: rowScope };
+            ng.gridService.eventStorage.rowToMove = { targetRow: targetRow, scope: rowScope };
         }
     };
 
@@ -597,7 +607,7 @@ ng.AggregateProvider = function (grid, gridService) {
         var rowScope = ko.dataFor(targetRow);
         if (rowScope) {
             // If we have the same Row, do nothing.
-            var prevRow = gridService.eventStorage.rowToMove;
+            var prevRow = ng.gridService.eventStorage.rowToMove;
             if (prevRow.scope.row == rowScope.row) return;
             // Splice the Rows via the actual datasource
             var sd = grid.sortedData();
@@ -607,7 +617,7 @@ ng.AggregateProvider = function (grid, gridService) {
             grid.sortedData.splice(j, 0, prevRow.scope.row.entity);
             grid.searchProvider.evalFilter();
             // clear out the rowToMove object
-            gridService.eventStorage.rowToMove = undefined;
+            ng.gridService.eventStorage.rowToMove = undefined;
             // if there isn't an apply already in progress lets start one
         }
     };
@@ -1001,6 +1011,7 @@ ng.Grid = function (options) {
     self.maxCanvasHt = ko.observable(0);
     //self vars
     self.config = $.extend(defaults, options);
+    self.config.columnDefs = ko.utils.unwrapObservable(options.columnDefs);
     self.gridId = "ng" + ng.utils.newId();
     self.$root = null; //this is the root element that is passed in with the binding handler
 	self.$groupPanel = null;
@@ -1055,7 +1066,7 @@ ng.Grid = function (options) {
     };
     self.buildColumnDefsFromData = function () {
         var sd = self.sortedData();
-        if (!self.config.columnDefs > 0) {
+        if (!self.config.columnDefs) {
             self.config.columnDefs = [];
         }
         if (!sd || !sd[0]) {
@@ -1066,9 +1077,11 @@ ng.Grid = function (options) {
         item = sd[0];
 
         ng.utils.forIn(item, function (prop, propName) {
-            self.config.columnDefs.push({
-                field: propName
-            });
+            if (propName != SELECTED_PROP) {
+                self.config.columnDefs.push({
+                    field: propName
+                });
+            }
         });
     };
     self.buildColumns = function () {

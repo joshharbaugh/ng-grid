@@ -1,6 +1,6 @@
 ﻿/// <reference path="../namespace.js" />
 /// <reference path="../../lib/knockout-2.2.0.js" />
-ng.AggregateProvider = function (grid, gridService) {
+ng.AggregateProvider = function (grid) {
     var self = this;
     // The init method gets called during the ng-grid directive execution.
     self.colToMove = undefined;
@@ -179,7 +179,7 @@ ng.AggregateProvider = function (grid, gridService) {
             // set draggable events
             targetRow.attr('draggable', 'true');
             // Save the row for later.
-            gridService.eventStorage.rowToMove = { targetRow: targetRow, scope: rowScope };
+            ng.gridService.eventStorage.rowToMove = { targetRow: targetRow, scope: rowScope };
         }
     };
 
@@ -190,7 +190,7 @@ ng.AggregateProvider = function (grid, gridService) {
         var rowScope = ko.dataFor(targetRow);
         if (rowScope) {
             // If we have the same Row, do nothing.
-            var prevRow = gridService.eventStorage.rowToMove;
+            var prevRow = ng.gridService.eventStorage.rowToMove;
             if (prevRow.scope.row == rowScope.row) return;
             // Splice the Rows via the actual datasource
             var sd = grid.sortedData();
@@ -200,7 +200,7 @@ ng.AggregateProvider = function (grid, gridService) {
             grid.sortedData.splice(j, 0, prevRow.scope.row.entity);
             grid.searchProvider.evalFilter();
             // clear out the rowToMove object
-            gridService.eventStorage.rowToMove = undefined;
+            ng.gridService.eventStorage.rowToMove = undefined;
             // if there isn't an apply already in progress lets start one
         }
     };

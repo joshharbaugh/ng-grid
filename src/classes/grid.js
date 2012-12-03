@@ -59,6 +59,7 @@ ng.Grid = function (options) {
     self.maxCanvasHt = ko.observable(0);
     //self vars
     self.config = $.extend(defaults, options);
+    self.config.columnDefs = ko.utils.unwrapObservable(options.columnDefs);
     self.gridId = "ng" + ng.utils.newId();
     self.$root = null; //this is the root element that is passed in with the binding handler
 	self.$groupPanel = null;
@@ -113,7 +114,7 @@ ng.Grid = function (options) {
     };
     self.buildColumnDefsFromData = function () {
         var sd = self.sortedData();
-        if (!self.config.columnDefs > 0) {
+        if (!self.config.columnDefs) {
             self.config.columnDefs = [];
         }
         if (!sd || !sd[0]) {
@@ -124,9 +125,11 @@ ng.Grid = function (options) {
         item = sd[0];
 
         ng.utils.forIn(item, function (prop, propName) {
-            self.config.columnDefs.push({
-                field: propName
-            });
+            if (propName != SELECTED_PROP) {
+                self.config.columnDefs.push({
+                    field: propName
+                });
+            }
         });
     };
     self.buildColumns = function () {

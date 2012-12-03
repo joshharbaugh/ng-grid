@@ -49,10 +49,13 @@ function mainViewModel() {
         showColumnMenu: true,
         showFilter: false,
         maintainColumnRatios: false,
-        columnDefs: [{ field: 'name', displayName: 'Very Long Name Title', headerClass: 'foo' },
+        columnDefs: ko.observableArray( [{ field: 'name', displayName: 'Very Long Name Title', headerClass: 'foo' },
                      { field: 'allowance',  aggLabelFilter: 'currency'},
                      { field: 'birthday', cellFilter: 'date'},
-                     { field: 'paid',  cellFilter: 'checkmark' }]
+                     { field: 'paid',  cellFilter: 'checkmark' }])
+    };
+    self.btnClick = function() {
+        self.gridOptions.columnDefs(undefined);
     };
 }
 ko.applyBindings(new mainViewModel())

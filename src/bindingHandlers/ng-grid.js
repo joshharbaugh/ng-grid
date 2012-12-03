@@ -1,6 +1,6 @@
 ﻿ko.bindingHandlers['ngGrid'] = (function () {
     return {
-        'init': function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+        'init': function (element, valueAccessor) {
             var options = valueAccessor();
             var elem = $(element);
             options.gridDim = new ng.Dimension({ outerHeight: elem.height(), outerWidth: elem.width() });
@@ -15,6 +15,16 @@
                 grid.configureColumnWidths();
                 grid.refreshDomSizes();
             });
+            // if columndefs are observable watch for changes and rebuild columns.
+            if (ko.isObservable(options.columnDefs)) {
+                options.columnDefs.subscribe(function (newDefs) {
+                    grid.columns([]);
+                    grid.config.columnDefs = newDefs;
+                    grid.buildColumns();
+                    grid.configureColumnWidths();
+                    ng.domUtilityService.BuildStyles(grid);
+                });
+            }
             //set the right styling on the container
             elem.addClass("ngGrid")
                 .addClass("ui-widget")
