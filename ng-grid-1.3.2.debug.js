@@ -2,7 +2,7 @@
 * ng-grid JavaScript Library
 * Authors: https://github.com/Crash8308/ng-grid/blob/master/README.md
 * License: MIT (http://www.opensource.org/licenses/mit-license.php)
-* Compiled At: 12/01/2012 16:10:14
+* Compiled At: 12/02/2012 16:36:52
 ***********************************************/
 
 (function(window, undefined){
@@ -272,10 +272,8 @@ ko.bindingHandlers['ngRow'] = (function () {
 ko.bindingHandlers['ngCell'] = (function () {
     return {
         'init': function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-            var col = viewModel;
-            col.$parent = bindingContext.$parent;
-            var cell = $(col.cellTemplate);
-            ko.applyBindings(col, cell[0]);
+            var cell = $(viewModel.cellTemplate);
+            ko.applyBindings(bindingContext, cell[0]);
             $(element).append(cell);
             return { controlsDescendantBindings: true };
         }
@@ -289,7 +287,7 @@ ko.bindingHandlers['ngHeaderRow'] = (function () {
     return {
         'init': function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
             var headerRow = $(viewModel.headerRowTemplate);
-            ko.applyBindings(viewModel, headerRow[0]);
+            ko.applyBindings(bindingContext, headerRow[0]);
             $(element).append(headerRow);
             return { controlsDescendantBindings: true };
         }
@@ -302,11 +300,9 @@ ko.bindingHandlers['ngHeaderRow'] = (function () {
 ko.bindingHandlers['ngHeaderCell'] = (function () {
     return {
         'init': function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-            var col = viewModel;
-            col.$index = bindingContext.$index;
-            col.$grid = bindingContext.$parent;
-            var headerCell = $(col.headerCellTemplate);
-            ko.applyBindings(col, headerCell[0]);
+            var newContext = bindingContext.extend({ $grid: bindingContext.$parent });
+            var headerCell = $(viewModel.headerCellTemplate);
+            ko.applyBindings(newContext, headerCell[0]);
             $(element).append(headerCell);
             return { controlsDescendantBindings: true };
         }

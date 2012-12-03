@@ -1,11 +1,9 @@
 ﻿ko.bindingHandlers['ngHeaderCell'] = (function () {
     return {
         'init': function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-            var col = viewModel;
-            col.$index = bindingContext.$index;
-            col.$grid = bindingContext.$parent;
-            var headerCell = $(col.headerCellTemplate);
-            ko.applyBindings(col, headerCell[0]);
+            var newContext = bindingContext.extend({ $grid: bindingContext.$parent });
+            var headerCell = $(viewModel.headerCellTemplate);
+            ko.applyBindings(newContext, headerCell[0]);
             $(element).append(headerCell);
             return { controlsDescendantBindings: true };
         }
