@@ -186,8 +186,10 @@ ng.RowFactory = function(grid) {
                     }));
                     ng.domUtilityService.BuildStyles(grid);
                 }
-                var col = cols.filter(function(c) { return c.field == group; })[0];
-                var val = ng.utils.evalProperty(item, group).toString();
+                var col = cols.filter(function (c) { return c.field == group; })[0];
+                var val = ng.utils.evalProperty(item, group);
+                if (col.cellFilter) val = col.cellFilter(val);
+                val = val ? val.toString() : 'null';
                 if (!ptr[val]) ptr[val] = {};
                 if (!ptr[NG_FIELD]) ptr[NG_FIELD] = group;
                 if (!ptr[NG_DEPTH]) ptr[NG_DEPTH] = depth;

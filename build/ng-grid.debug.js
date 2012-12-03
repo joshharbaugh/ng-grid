@@ -2,7 +2,7 @@
 * ng-grid JavaScript Library
 * Authors: https://github.com/Crash8308/ng-grid/blob/master/README.md
 * License: MIT (http://www.opensource.org/licenses/mit-license.php)
-* Compiled At: 12/02/2012 22:03:08
+* Compiled At: 12/03/2012 00:29:57
 ***********************************************/
 
 (function(window, undefined){
@@ -935,8 +935,10 @@ ng.RowFactory = function(grid) {
                     }));
                     ng.domUtilityService.BuildStyles(grid);
                 }
-                var col = cols.filter(function(c) { return c.field == group; })[0];
-                var val = ng.utils.evalProperty(item, group).toString();
+                var col = cols.filter(function (c) { return c.field == group; })[0];
+                var val = ng.utils.evalProperty(item, group);
+                if (col.cellFilter) val = col.cellFilter(val);
+                val = val ? val.toString() : 'null';
                 if (!ptr[val]) ptr[val] = {};
                 if (!ptr[NG_FIELD]) ptr[NG_FIELD] = group;
                 if (!ptr[NG_DEPTH]) ptr[NG_DEPTH] = depth;

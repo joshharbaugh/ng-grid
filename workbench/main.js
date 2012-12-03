@@ -60,7 +60,8 @@ function mainViewModel() {
                      { field: 'birthday', cellFilter: dateFilter },
                      { field: 'paid', cellFilter: checkmarkFilter }])
     };
-    self.btnClick = function() {
+    self.btnClick = function () {
+        alert(self.mySelections().length);
         self.gridOptions.columnDefs(undefined);
     };
 
