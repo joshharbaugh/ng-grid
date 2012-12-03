@@ -6,10 +6,11 @@
             <ul data-bind="visible: configGroups().length > 0" class="ngGroupList">
                 <li class="ngGroupItem" data-bind="foreach: configGroups">
                     <span class="ngGroupElement">
-                        <span class="ngGroupName" data-bind="text: displayName">
-                            <span data-bind="click: removeGroup" class="ngRemoveGroup">x</span>
-                        </span>
-                        <span data-bind="visible: $index() < $root.configGroups().length" class="ngGroupArrow"></span>
+                        <div class="ngGroupName">
+                            <span data-bind="text: displayName"></span>
+                            <span data-bind="click: $root.removeGroup" class="ngRemoveGroup">x</span>
+                        </div>
+                        <span data-bind="visible: $index() < ($root.configGroups().length - 1)" class="ngGroupArrow"></span>
                     </span>
                 </li>
             </ul>
