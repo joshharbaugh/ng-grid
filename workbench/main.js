@@ -2,6 +2,12 @@
 /// <reference path="../ng-grid-1.0.0.debug.js" />
 function mainViewModel() {
     var self = this;
+    var checkmarkFilter = function (input) {
+        return input ? '\u2714' : '\u2718';
+    };
+    var dateFilter = function (input) {
+        return new Date(input);
+    };
     self.mySelections = ko.observableArray([]);
     self.myData = ko.observableArray([]);
     self.filterOptions = {
@@ -50,12 +56,13 @@ function mainViewModel() {
         showFilter: false,
         maintainColumnRatios: false,
         columnDefs: ko.observableArray( [{ field: 'name', displayName: 'Very Long Name Title', headerClass: 'foo' },
-                     { field: 'allowance',  aggLabelFilter: 'currency'},
-                     { field: 'birthday', cellFilter: 'date'},
-                     { field: 'paid',  cellFilter: 'checkmark' }])
+                     { field: 'allowance' },
+                     { field: 'birthday', cellFilter: dateFilter },
+                     { field: 'paid', cellFilter: checkmarkFilter }])
     };
     self.btnClick = function() {
         self.gridOptions.columnDefs(undefined);
     };
+
 }
 ko.applyBindings(new mainViewModel())

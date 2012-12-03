@@ -2,7 +2,7 @@
 * ng-grid JavaScript Library
 * Authors: https://github.com/Crash8308/ng-grid/blob/master/README.md
 * License: MIT (http://www.opensource.org/licenses/mit-license.php)
-* Compiled At: 12/02/2012 20:36:40
+* Compiled At: 12/02/2012 21:00:25
 ***********************************************/
 
 (function(window, undefined){
@@ -180,7 +180,7 @@ ng.defaultRowTemplate = function(){ return '<div data-bind="foreach: $grid.visib
 /***********************************************
 * FILE: ..\src\templates\cellTemplate.html
 ***********************************************/
-ng.defaultCellTemplate = function(){ return '<div data-bind="attr: { \'class\': \'ngCellText colt\' + $index()}, html: $parent.getProperty($data.field)"></div>';};
+ng.defaultCellTemplate = function(){ return '<div data-bind="attr: { \'class\': \'ngCellText colt\' + $index()}, html: $data.getProperty($parent)"></div>';};
 
 /***********************************************
 * FILE: ..\src\templates\aggregateTemplate.html
