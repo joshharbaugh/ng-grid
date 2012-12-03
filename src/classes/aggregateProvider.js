@@ -66,7 +66,7 @@ ng.AggregateProvider = function (grid) {
         var groupItem = $(event.target);
         // Get the scope from the header container
 		if(groupItem[0].className != 'ngRemoveGroup'){
-		    var groupItemScope = ko.dataFor(groupItem);
+		    var groupItemScope = ko.dataFor(groupItem[0]);
 			if (groupItemScope) {
 				// set draggable events
 				if(!grid.config.jqueryUIDraggable){
@@ -93,7 +93,7 @@ ng.AggregateProvider = function (grid) {
                 grid.configGroups.splice(self.groupToMove.index, 1);
                 grid.configGroups.push(self.groupToMove.groupName);
             } else {
-                groupScope = ko.dataFor(groupContainer);
+                groupScope = ko.dataFor(groupContainer[0]);
                 if (groupScope) {
                     // If we have the same column, do nothing.
                     if (self.groupToMove.index != groupScope.$index){
@@ -111,7 +111,7 @@ ng.AggregateProvider = function (grid) {
 				if (groupContainer.context.className == 'ngGroupPanel' || groupContainer.context.className == 'ngGroupPanelDescription') {
 				    grid.configGroups.push(self.colToMove.col);
 				} else {
-				    groupScope = ko.dataFor(groupContainer);
+				    groupScope = ko.dataFor(groupContainer[0]);
 				    if (groupScope) {
 						// Splice the columns
 				        grid.configGroups.splice(groupScope.$index + 1, 0, self.colToMove.col);
@@ -127,10 +127,10 @@ ng.AggregateProvider = function (grid) {
         // Get the closest header container from where we clicked.
         var headerContainer = $(event.target).closest('.ngHeaderSortColumn');
         // Get the scope from the header container
-        var headerScope = ko.dataFor(headerContainer);
+        var headerScope = ko.dataFor(headerContainer[0]);
         if (headerScope) {
             // Save the column for later.
-            self.colToMove = { header: headerContainer, col: headerScope.col };
+            self.colToMove = { header: headerContainer, col: headerScope };
         }
     };
     
@@ -154,13 +154,13 @@ ng.AggregateProvider = function (grid) {
         // Get the closest header to where we dropped
         var headerContainer = $(event.target).closest('.ngHeaderSortColumn');
         // Get the scope from the header.
-        var headerScope = ko.dataFor(headerContainer);
+        var headerScope = ko.dataFor(headerContainer[0]);
         if (headerScope) {
             // If we have the same column, do nothing.
-            if (self.colToMove.col == headerScope.col) return;
+            if (self.colToMove.col == headerScope) return;
             // Splice the columns
             grid.columns.splice(self.colToMove.col.index, 1);
-            grid.columns.splice(headerScope.col.index, 0, self.colToMove.col);
+            grid.columns.splice(headerScope.index, 0, self.colToMove.col);
             grid.fixColumnIndexes();
             // Finally, rebuild the CSS styles.
             ng.domUtilityService.BuildStyles(grid);
