@@ -125,9 +125,11 @@ ng.AggregateProvider = function (grid) {
     //Header functions
     self.onHeaderMouseDown = function (event) {
         // Get the closest header container from where we clicked.
-        var headerContainer = $(event.target).closest('.ngHeaderSortColumn');
+        var headerContainer = $(event.target).closest('.ngHeaderSortColumn')[0];
+        if (!headerContainer) return true;
         // Get the scope from the header container
-        var headerScope = ko.dataFor(headerContainer[0]);
+        
+        var headerScope = ko.dataFor(headerContainer);
         if (headerScope) {
             // Save the column for later.
             self.colToMove = { header: headerContainer, col: headerScope };
@@ -152,9 +154,10 @@ ng.AggregateProvider = function (grid) {
         if (!self.colToMove) return;
         self.onHeaderDragStop();
         // Get the closest header to where we dropped
-        var headerContainer = $(event.target).closest('.ngHeaderSortColumn');
+        var headerContainer = $(event.target).closest('.ngHeaderSortColumn')[0];
+        if (!headerContainer) return true;
         // Get the scope from the header.
-        var headerScope = ko.dataFor(headerContainer[0]);
+        var headerScope = ko.dataFor(headerContainer);
         if (headerScope) {
             // If we have the same column, do nothing.
             if (self.colToMove.col == headerScope) return;

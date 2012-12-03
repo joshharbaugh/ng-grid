@@ -31,8 +31,8 @@ function mainViewModel() {
             } else {
                 data = largeLoad();
             }
-            //var pagedData = data.slice((page - 1) * pageSize, page * pageSize);
-            self.myData(data);
+            var pagedData = data.slice((page - 1) * pageSize, page * pageSize);
+            self.myData(pagedData);
             self.pagingOptions.totalServerItems(data.length);
         }, 100);
     };
@@ -55,6 +55,8 @@ function mainViewModel() {
         showColumnMenu: true,
         showFilter: false,
         maintainColumnRatios: false,
+        enablePaging: true,
+        pagingOptions: self.pagingOptions,
         columnDefs: ko.observableArray( [{ field: 'name', displayName: 'Very Long Name Title', headerClass: 'foo' },
                      { field: 'allowance' },
                      { field: 'birthday', cellFilter: dateFilter },

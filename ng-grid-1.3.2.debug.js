@@ -2,7 +2,7 @@
 * ng-grid JavaScript Library
 * Authors: https://github.com/Crash8308/ng-grid/blob/master/README.md
 * License: MIT (http://www.opensource.org/licenses/mit-license.php)
-* Compiled At: 12/03/2012 00:29:57
+* Compiled At: 12/03/2012 00:47:16
 ***********************************************/
 
 (function(window, undefined){
@@ -542,9 +542,11 @@ ng.AggregateProvider = function (grid) {
     //Header functions
     self.onHeaderMouseDown = function (event) {
         // Get the closest header container from where we clicked.
-        var headerContainer = $(event.target).closest('.ngHeaderSortColumn');
+        var headerContainer = $(event.target).closest('.ngHeaderSortColumn')[0];
+        if (!headerContainer) return true;
         // Get the scope from the header container
-        var headerScope = ko.dataFor(headerContainer[0]);
+        
+        var headerScope = ko.dataFor(headerContainer);
         if (headerScope) {
             // Save the column for later.
             self.colToMove = { header: headerContainer, col: headerScope };
@@ -569,9 +571,10 @@ ng.AggregateProvider = function (grid) {
         if (!self.colToMove) return;
         self.onHeaderDragStop();
         // Get the closest header to where we dropped
-        var headerContainer = $(event.target).closest('.ngHeaderSortColumn');
+        var headerContainer = $(event.target).closest('.ngHeaderSortColumn')[0];
+        if (!headerContainer) return true;
         // Get the scope from the header.
-        var headerScope = ko.dataFor(headerContainer[0]);
+        var headerScope = ko.dataFor(headerContainer);
         if (headerScope) {
             // If we have the same column, do nothing.
             if (self.colToMove.col == headerScope) return;
@@ -1321,9 +1324,8 @@ ng.Grid = function (options) {
     };
     self.allSelected = ko.observable(false);
     self.toggleSelectAll = function () {
-        var s = self.allSelected();
-        self.allSelected(!s);
         self.selectionService.toggleSelectAll(self.allSelected());
+        return true;
     };
     self.totalFilteredItemsLength = ko.computed(function () {
         return Math.max(self.filteredData.length);
@@ -1391,18 +1393,18 @@ ng.Grid = function (options) {
     });
     self.pageForward = function () {
         var page = self.config.pagingOptions.currentPage();
-        self.config.pagingOptions.currentPage = Math.min(page + 1, self.maxPages());
+        self.config.pagingOptions.currentPage(Math.min(page + 1, self.maxPages()));
     };
     self.pageBackward = function () {
         var page = self.config.pagingOptions.currentPage();
-        self.config.pagingOptions.currentPage = Math.max(page - 1, 1);
+        self.config.pagingOptions.currentPage(Math.max(page - 1, 1));
     };
     self.pageToFirst = function () {
-        self.config.pagingOptions.currentPage = 1;
+        self.config.pagingOptions.currentPage(1);
     };
     self.pageToLast = function () {
         var maxPages = self.maxPages();
-        self.config.pagingOptions.currentPage = maxPages;
+        self.config.pagingOptions.currentPage(maxPages);
     };
     self.cantPageForward = ko.computed(function () {
         var curPage = self.config.pagingOptions.currentPage();

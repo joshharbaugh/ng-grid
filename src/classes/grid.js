@@ -367,9 +367,8 @@ ng.Grid = function (options) {
     };
     self.allSelected = ko.observable(false);
     self.toggleSelectAll = function () {
-        var s = self.allSelected();
-        self.allSelected(!s);
         self.selectionService.toggleSelectAll(self.allSelected());
+        return true;
     };
     self.totalFilteredItemsLength = ko.computed(function () {
         return Math.max(self.filteredData.length);
@@ -437,18 +436,18 @@ ng.Grid = function (options) {
     });
     self.pageForward = function () {
         var page = self.config.pagingOptions.currentPage();
-        self.config.pagingOptions.currentPage = Math.min(page + 1, self.maxPages());
+        self.config.pagingOptions.currentPage(Math.min(page + 1, self.maxPages()));
     };
     self.pageBackward = function () {
         var page = self.config.pagingOptions.currentPage();
-        self.config.pagingOptions.currentPage = Math.max(page - 1, 1);
+        self.config.pagingOptions.currentPage(Math.max(page - 1, 1));
     };
     self.pageToFirst = function () {
-        self.config.pagingOptions.currentPage = 1;
+        self.config.pagingOptions.currentPage(1);
     };
     self.pageToLast = function () {
         var maxPages = self.maxPages();
-        self.config.pagingOptions.currentPage = maxPages;
+        self.config.pagingOptions.currentPage(maxPages);
     };
     self.cantPageForward = ko.computed(function () {
         var curPage = self.config.pagingOptions.currentPage();
